@@ -99,6 +99,26 @@
   .net-explain.show { display: block; }
   .net-explain strong { color: var(--mustard); font-weight: 600; }
 
+  .trust-mini {
+    margin-top: 28px;
+    text-align: center;
+  }
+  .trust-mini .net-monitor {
+    background: var(--ink);
+    color: var(--bone);
+    padding: 6px 12px 6px 10px;
+    font-size: 11px;
+    margin: 0 auto 8px;
+  }
+  .trust-mini .net-monitor strong { color: #4ade80; }
+  .trust-mini-label {
+    font-size: 11px;
+    color: var(--ink-soft);
+    line-height: 1.4;
+    max-width: 280px;
+    margin: 0 auto;
+  }
+
   /* ===== UNIFIED TRUST CARD ===== */
   .trust-card {
     background: var(--ink);
@@ -449,6 +469,13 @@
     <div class="parsing-title">Reading the receipts...</div>
     <div class="parsing-status" id="parsing-status">Opening the file</div>
     <div class="parsing-bar"><div class="parsing-fill" id="parsing-fill"></div></div>
+    <div class="trust-mini">
+      <div class="net-monitor" id="net-monitor-2">
+        <span class="net-dot"></span>
+        <span><strong id="net-count-2">0</strong> requests &middot; <span id="net-time-2">live</span></span>
+      </div>
+      <div class="trust-mini-label">Your chat is being read locally. Nothing leaves this device.</div>
+    </div>
   </div>
 </div>
 
@@ -460,6 +487,13 @@
     <div class="name-row"><label id="name-b-label">Voice 2</label><input type="text" id="name-b-input" /></div>
     <div class="name-row"><label>Monogram</label><input type="text" id="monogram-input" maxlength="6" placeholder="S & A" /></div>
     <button class="btn-primary" id="names-go">Open the stories →</button>
+    <div class="trust-mini" style="margin-top:18px;">
+      <div class="net-monitor" id="net-monitor-3">
+        <span class="net-dot"></span>
+        <span><strong id="net-count-3">0</strong> requests &middot; <span id="net-time-3">live</span></span>
+      </div>
+      <div class="trust-mini-label">Names stay on your device too. Only used to label the cards.</div>
+    </div>
   </div>
 </div>
 
@@ -516,21 +550,23 @@ setTimeout(() => {
   let lastRequestTime = null;
   const startTime = Date.now();
 
-  const monitor = $('net-monitor');
-  const countEl = $('net-count');
-  const timeEl = $('net-time');
-
   function update() {
-    if (!countEl) return;
-    countEl.textContent = count;
+    const allMonitors = document.querySelectorAll('[id^="net-monitor"]');
+    const allCounts = document.querySelectorAll('[id^="net-count"]');
+    const allTimes = document.querySelectorAll('[id^="net-time"]');
+    if (!allCounts.length) return;
+    allCounts.forEach(el => el.textContent = count);
+
+    let timeText;
     if (count === 0) {
-      timeEl.textContent = formatElapsed(Date.now() - startTime) + ' watching';
+      timeText = formatElapsed(Date.now() - startTime) + ' watching';
     } else if (count <= 2) {
-      timeEl.textContent = 'analytics ping';
+      timeText = 'analytics ping';
     } else {
-      timeEl.textContent = 'last: ' + formatElapsed(Date.now() - lastRequestTime) + ' ago';
-      monitor.classList.add('warn');
+      timeText = 'last: ' + formatElapsed(Date.now() - lastRequestTime) + ' ago';
+      allMonitors.forEach(el => el.classList.add('warn'));
     }
+    allTimes.forEach(el => el.textContent = timeText);
   }
 
   function formatElapsed(ms) {
