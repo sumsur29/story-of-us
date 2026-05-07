@@ -229,6 +229,81 @@
   .music-tray h4 { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.7; margin-bottom: 4px; font-weight: 600; }
   .music-option { background: rgba(245,241,232,0.1); border: none; color: var(--bone); padding: 8px 12px; border-radius: 8px; font-size: 12px; cursor: pointer; text-align: left; font-weight: 500; }
   .music-option:hover, .music-option.active { background: var(--mustard); color: var(--ink); }
+
+  /* ===== NARRATOR PULLQUOTE (added to existing cards) ===== */
+  .narrator { font-family: 'Fraunces', serif; font-style: italic; font-size: 14px; color: var(--ink); line-height: 1.4; margin-top: 10px; padding: 10px 14px; border-left: 3px solid var(--pink); background: rgba(255, 77, 143, 0.06); border-radius: 0 8px 8px 0; }
+
+  /* ===== FIRST / LAST CHAPTER ===== */
+  .firstlast-wrap { display: flex; flex-direction: column; gap: 14px; margin-top: 8px; }
+  .fl-card { padding: 16px; border-radius: 12px; border: 1.5px solid var(--ink); }
+  .fl-card.first { background: var(--mustard); }
+  .fl-card.last { background: #FFE4ED; }
+  .fl-meta { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink); font-weight: 700; margin-bottom: 6px; }
+  .fl-bubble { background: var(--bone); border-radius: 12px; padding: 10px 14px; font-size: 14px; color: var(--ink); line-height: 1.4; border: 1px solid rgba(27, 67, 50, 0.15); }
+  .fl-bubble .who { font-size: 10px; font-weight: 600; color: var(--ink-soft); margin-bottom: 3px; letter-spacing: 0.05em; }
+  .fl-date { font-family: 'Fraunces', serif; font-style: italic; font-size: 12px; color: var(--ink-soft); margin-top: 6px; text-align: right; }
+
+  /* ===== SUPERCUT CHAPTER ===== */
+  .supercut-frame { background: #ECE5DD; border-radius: 14px; padding: 16px 12px; margin-top: 8px; max-height: 480px; overflow: hidden; position: relative; border: 1.5px solid var(--ink); }
+  .supercut-date { text-align: center; background: rgba(27, 67, 50, 0.08); border-radius: 12px; padding: 4px 12px; font-size: 11px; color: var(--ink-soft); margin-bottom: 12px; display: inline-block; left: 50%; transform: translateX(-50%); position: relative; font-weight: 500; }
+  .sc-bubble { max-width: 78%; padding: 7px 11px 6px; border-radius: 12px; margin-bottom: 6px; font-size: 13px; line-height: 1.35; opacity: 0; transform: translateY(8px); animation: scIn 0.3s forwards; word-wrap: break-word; }
+  .sc-bubble.left { background: white; border-top-left-radius: 4px; align-self: flex-start; margin-right: auto; color: var(--ink); }
+  .sc-bubble.right { background: #DCF8C6; border-top-right-radius: 4px; align-self: flex-end; margin-left: auto; color: var(--ink); }
+  .sc-time { font-size: 9px; color: rgba(0,0,0,0.4); margin-top: 2px; text-align: right; }
+  .sc-stack { display: flex; flex-direction: column; }
+  @keyframes scIn { to { opacity: 1; transform: translateY(0); } }
+  .supercut-overlay { position: absolute; bottom: 0; left: 0; right: 0; height: 60px; background: linear-gradient(transparent, #ECE5DD); pointer-events: none; }
+
+  /* ===== SIGNATURE CHAPTER ===== */
+  .sig-pair { display: flex; flex-direction: column; gap: 14px; margin-top: 8px; }
+  .sig-block { background: var(--paper-warm); border: 1.5px solid var(--ink); border-radius: 12px; padding: 14px 16px; }
+  .sig-block.b { background: var(--mustard); }
+  .sig-who { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 8px; font-weight: 700; }
+  .sig-quote { font-family: 'Fraunces', serif; font-style: italic; font-size: 22px; color: var(--ink); line-height: 1.2; font-weight: 500; }
+  .sig-quote::before { content: '"'; color: var(--pink); margin-right: 2px; font-size: 26px; }
+  .sig-quote::after { content: '"'; color: var(--pink); margin-left: 2px; font-size: 26px; }
+  .sig-meta { font-size: 11px; color: var(--ink-soft); margin-top: 6px; font-weight: 500; }
+
+  /* ===== TOPICS CHAPTER ===== */
+  .topics-wrap { background: var(--paper-warm); border: 1.5px solid var(--ink); border-radius: 12px; padding: 14px 12px; margin-top: 8px; }
+  .topics-wrap canvas { width: 100% !important; height: 200px !important; display: block; }
+  .topics-legend { display: flex; flex-wrap: wrap; gap: 6px 10px; margin-top: 10px; font-size: 10px; color: var(--ink); font-weight: 500; justify-content: center; }
+  .topics-legend span { display: flex; align-items: center; gap: 4px; }
+  .topics-legend .dot { width: 8px; height: 8px; border-radius: 2px; }
+
+  /* ===== FINGERPRINTS CHAPTER ===== */
+  .fp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(64px, 1fr)); gap: 8px; margin-top: 8px; }
+  .fp-card { background: var(--paper-warm); border: 1.5px solid var(--ink); border-radius: 8px; padding: 8px 4px 6px; text-align: center; }
+  .fp-card.peak { background: var(--mustard); }
+  .fp-svg { width: 100%; height: 50px; display: block; }
+  .fp-yr { font-family: 'Fraunces', serif; font-style: italic; font-size: 12px; color: var(--ink); font-weight: 500; margin-top: 2px; }
+
+  /* ===== QUOTE GAME ===== */
+  .qg-wrap { margin-top: 8px; display: flex; flex-direction: column; gap: 12px; }
+  .qg-quote { background: var(--paper-warm); border: 1.5px solid var(--ink); border-radius: 12px; padding: 18px 16px; font-family: 'Fraunces', serif; font-style: italic; font-size: 17px; color: var(--ink); line-height: 1.35; }
+  .qg-prompt { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 8px; font-weight: 600; text-align: center; }
+  .qg-buttons { display: flex; gap: 10px; }
+  .qg-btn { flex: 1; padding: 14px 12px; background: var(--bone); border: 1.5px solid var(--ink); border-radius: 10px; font-family: inherit; font-size: 14px; color: var(--ink); cursor: pointer; font-weight: 500; transition: all 0.15s; }
+  .qg-btn:hover { background: var(--mustard); }
+  .qg-btn.correct { background: var(--mustard); border-color: var(--ink); }
+  .qg-btn.wrong { background: #FFE4ED; border-color: var(--rose); color: var(--rose); }
+  .qg-btn.disabled { pointer-events: none; opacity: 0.5; }
+  .qg-btn.show-correct { background: var(--mustard); border-style: solid; }
+  .qg-progress { display: flex; gap: 4px; justify-content: center; margin-top: 6px; }
+  .qg-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(27, 67, 50, 0.15); border: 1.5px solid var(--ink); }
+  .qg-dot.right { background: var(--mustard); }
+  .qg-dot.wrong { background: var(--rose); border-color: var(--rose); }
+  .qg-result { text-align: center; padding: 20px 0; }
+  .qg-score { font-family: 'Fraunces', serif; font-style: italic; font-size: 64px; color: var(--pink); line-height: 1; font-weight: 500; }
+  .qg-verdict { font-family: 'Fraunces', serif; font-style: italic; font-size: 18px; color: var(--ink); margin-top: 10px; line-height: 1.3; }
+
+  /* ===== VERDICT CHAPTER ===== */
+  .verdict-card { padding: 28px 22px; background: var(--ink); color: var(--bone); border-radius: 16px; text-align: center; margin: auto 0; position: relative; overflow: hidden; }
+  .verdict-card::before { content: ''; position: absolute; top: -40px; right: -40px; width: 140px; height: 140px; background: var(--pink); opacity: 0.3; border-radius: 50%; }
+  .verdict-card::after { content: ''; position: absolute; bottom: -30px; left: -30px; width: 100px; height: 100px; background: var(--mustard); opacity: 0.4; border-radius: 50%; }
+  .verdict-label { position: relative; z-index: 2; font-size: 10px; letter-spacing: 0.25em; color: var(--mustard); text-transform: uppercase; font-weight: 700; margin-bottom: 18px; }
+  .verdict-text { position: relative; z-index: 2; font-family: 'Fraunces', serif; font-style: italic; font-size: 32px; color: var(--bone); line-height: 1.15; font-weight: 500; letter-spacing: -0.01em; }
+  .verdict-mono { position: relative; z-index: 2; font-family: 'Fraunces', serif; font-style: italic; font-size: 14px; color: var(--mustard); margin-top: 22px; opacity: 0.85; }
 </style>
 </head>
 <body>
@@ -549,7 +624,261 @@ function computeStats(msgs, A, B) {
   stats.convergence = computeConvergence(stats.yearlyWordsA, stats.yearlyWordsB);
   stats._dailyKeys = dailyKeys;
 
+  stats.firstMsg = msgs.find(m => m.body && m.body.length > 1 && !/<media|omitted>/i.test(m.body)) || msgs[0];
+  stats.lastMsg = [...msgs].reverse().find(m => m.body && m.body.length > 1 && !/<media|omitted>/i.test(m.body)) || msgs[msgs.length-1];
+
+  stats.supercut = buildSupercut(msgs, stats.biggestDays[0]);
+
+  stats.signatureA = findSignaturePhrases(msgs, A);
+  stats.signatureB = findSignaturePhrases(msgs, B);
+
+  stats.topicMix = computeTopicMix(msgs);
+
+  stats.fingerprints = computeYearlyFingerprints(msgs, stats.daily);
+
+  stats.quotes = pickDistinctiveQuotes(msgs, A, B);
+
+  stats.verdict = computeVerdict(stats, A, B);
+
+  stats.narrator = generateNarratorLines(stats, A, B);
+
   return stats;
+}
+
+function buildSupercut(msgs, biggestDay) {
+  if (!biggestDay) return null;
+  const dayKey = biggestDay.date;
+  const dayStart = new Date(dayKey);
+  const dayEnd = new Date(dayStart.getTime() + 86400000);
+  const dayMsgs = msgs.filter(m => m.date >= dayStart && m.date < dayEnd);
+  if (dayMsgs.length < 5) return null;
+  let bestStart = 0, bestCount = 0;
+  for (let i = 0; i < dayMsgs.length; i++) {
+    let j = i;
+    while (j < dayMsgs.length && (dayMsgs[j].date - dayMsgs[i].date) < 60*60*1000) j++;
+    if (j - i > bestCount) { bestCount = j - i; bestStart = i; }
+  }
+  const burst = dayMsgs.slice(bestStart, bestStart + Math.min(12, bestCount));
+  return {
+    date: dayKey,
+    totalThatDay: dayMsgs.length,
+    messages: burst.map(m => ({
+      sender: m.sender,
+      body: (m.body || '').replace(/<media omitted>/gi, '📎').slice(0, 140),
+      time: m.date
+    }))
+  };
+}
+
+function findSignaturePhrases(msgs, sender) {
+  const myMsgs = msgs.filter(m => m.sender === sender);
+  const otherMsgs = msgs.filter(m => m.sender !== sender);
+  const myBigrams = {}, otherBigrams = {};
+  const trigramsMine = {}, trigramsOther = {};
+  for (const m of myMsgs) {
+    const words = (m.body||'').toLowerCase().match(/[a-z']+/g) || [];
+    for (let i = 0; i < words.length-1; i++) myBigrams[words[i]+' '+words[i+1]] = (myBigrams[words[i]+' '+words[i+1]]||0)+1;
+    for (let i = 0; i < words.length-2; i++) trigramsMine[words[i]+' '+words[i+1]+' '+words[i+2]] = (trigramsMine[words[i]+' '+words[i+1]+' '+words[i+2]]||0)+1;
+  }
+  for (const m of otherMsgs) {
+    const words = (m.body||'').toLowerCase().match(/[a-z']+/g) || [];
+    for (let i = 0; i < words.length-1; i++) otherBigrams[words[i]+' '+words[i+1]] = (otherBigrams[words[i]+' '+words[i+1]]||0)+1;
+    for (let i = 0; i < words.length-2; i++) trigramsOther[words[i]+' '+words[i+1]+' '+words[i+2]] = (trigramsOther[words[i]+' '+words[i+1]+' '+words[i+2]]||0)+1;
+  }
+  const myTotal = myMsgs.length, otherTotal = otherMsgs.length;
+  const candidates = [];
+  for (const phrase of Object.keys(trigramsMine)) {
+    const mine = trigramsMine[phrase];
+    const theirs = trigramsOther[phrase] || 0;
+    if (mine < 5) continue;
+    const myRate = mine / myTotal;
+    const theirRate = theirs / Math.max(otherTotal, 1);
+    const ratio = myRate / Math.max(theirRate, 1/otherTotal/2);
+    if (ratio < 3) continue;
+    candidates.push({ phrase, mine, theirs, ratio, score: mine * Math.log(ratio + 1) });
+  }
+  for (const phrase of Object.keys(myBigrams)) {
+    if (phrase.split(' ').some(w => w.length < 3)) continue;
+    const mine = myBigrams[phrase];
+    const theirs = otherBigrams[phrase] || 0;
+    if (mine < 8) continue;
+    const myRate = mine / myTotal;
+    const theirRate = theirs / Math.max(otherTotal, 1);
+    const ratio = myRate / Math.max(theirRate, 1/otherTotal/2);
+    if (ratio < 2.5) continue;
+    candidates.push({ phrase, mine, theirs, ratio, score: mine * Math.log(ratio + 1) * 0.7 });
+  }
+  candidates.sort((a,b) => b.score - a.score);
+  return candidates.slice(0, 5);
+}
+
+function computeTopicMix(msgs) {
+  const buckets = {
+    'logistics': /\b(home|pick up|grocery|milk|bread|on my way|omw|traffic|leaving|arrive|pickup|drop|train|uber|cab)\b/i,
+    'affection': /\b(love|miss|baby|babe|honey|sweetie|cutie|hug|kiss|xoxo)\b|❤️|😘|🥰|💕|💖/,
+    'planning': /\b(weekend|tonight|tomorrow|saturday|sunday|dinner|lunch|brunch|movie|book|reservation|meeting|plan|schedule)\b/i,
+    'work / vent': /\b(boss|meeting|deadline|client|email|slack|call|annoying|stupid|hate|stressed|tired|exhausted|ugh)\b/i,
+    'jokes / lol': /\b(haha+|lol|lmao|rofl|loll+|hehe+|funny|hilarious|crazy)\b|😂|🤣|😆/i,
+    'check-in': /\b(how are you|hru|what are you doing|whats up|wyd|where are you|wru|home yet|done\?)\b/i,
+  };
+  const yearly = {};
+  for (const m of msgs) {
+    const yr = m.date.getFullYear();
+    if (!yearly[yr]) yearly[yr] = { 'logistics':0, 'affection':0, 'planning':0, 'work / vent':0, 'jokes / lol':0, 'check-in':0, 'other':0, total:0 };
+    yearly[yr].total++;
+    let matched = false;
+    for (const [topic, regex] of Object.entries(buckets)) {
+      if (regex.test(m.body || '')) { yearly[yr][topic]++; matched = true; break; }
+    }
+    if (!matched) yearly[yr].other++;
+  }
+  return yearly;
+}
+
+function computeYearlyFingerprints(msgs, daily) {
+  const yrs = {};
+  for (const m of msgs) {
+    const y = m.date.getFullYear();
+    if (!yrs[y]) yrs[y] = { count: 0, hours: new Array(24).fill(0), days: new Set(), emojis: 0 };
+    yrs[y].count++;
+    yrs[y].hours[m.date.getHours()]++;
+    yrs[y].days.add(m.date.toISOString().slice(0,10));
+  }
+  return Object.entries(yrs).map(([y, d]) => ({
+    year: +y,
+    count: d.count,
+    hours: d.hours,
+    activeDays: d.days.size,
+    avgPerDay: d.count / d.days.size
+  })).sort((a,b) => a.year - b.year);
+}
+
+function pickDistinctiveQuotes(msgs, A, B) {
+  const filter = (minLen, maxLen) => msgs.filter(m => {
+    const b = m.body || '';
+    if (b.length < minLen || b.length > maxLen) return false;
+    if (/<media|omitted/i.test(b)) return false;
+    if (/^(ok|okay|lol|haha|yes|no|sure|kk|yeah|nope|alright|cool)\.?$/i.test(b.trim())) return false;
+    return true;
+  });
+  let candidates = filter(18, 90);
+  if (candidates.length < 10) candidates = filter(10, 110);
+  if (candidates.length < 5) candidates = filter(6, 140);
+  if (candidates.length < 5) return [];
+  const aMsgs = candidates.filter(m => m.sender === A).sort(() => Math.random() - 0.5);
+  const bMsgs = candidates.filter(m => m.sender === B).sort(() => Math.random() - 0.5);
+  const picks = [];
+  const seen = new Set();
+  const add = (m) => {
+    if (!m) return;
+    const key = (m.body||'').toLowerCase().slice(0, 18);
+    if (seen.has(key)) return;
+    seen.add(key);
+    picks.push({ body: m.body, sender: m.sender, date: m.date });
+  };
+  for (let i = 0; i < 3 && i < aMsgs.length; i++) add(aMsgs[i]);
+  for (let i = 0; i < 3 && i < bMsgs.length; i++) add(bMsgs[i]);
+  return picks.sort(() => Math.random() - 0.5).slice(0, 5);
+}
+
+function computeVerdict(stats, A, B) {
+  const avgPerDay = stats.total / stats.days;
+  const lA = stats.medianLatencyA, lB = stats.medianLatencyB;
+  const fastReply = Math.min(lA, lB);
+
+  const hourTotals = new Array(24).fill(0);
+  for (let d = 0; d < 7; d++) for (let h = 0; h < 24; h++) hourTotals[h] += stats.hourDay[d][h];
+  const morningPct = (hourTotals.slice(5,11).reduce((a,b)=>a+b,0)) / stats.total;
+  const nightPct = (hourTotals.slice(21,24).reduce((a,b)=>a+b,0) + hourTotals.slice(0,3).reduce((a,b)=>a+b,0)) / stats.total;
+  const eveningPct = (hourTotals.slice(18,22).reduce((a,b)=>a+b,0)) / stats.total;
+
+  const yearly = stats.topicMix;
+  const allYears = Object.values(yearly);
+  const totalByTopic = {};
+  for (const y of allYears) for (const k of Object.keys(y)) if (k !== 'total') totalByTopic[k] = (totalByTopic[k]||0) + y[k];
+  const topTopic = Object.entries(totalByTopic).filter(([k]) => k !== 'other').sort((a,b) => b[1]-a[1])[0];
+
+  let pace, primeTime, character;
+  if (fastReply < 2 && avgPerDay > 50) pace = 'rapid-fire';
+  else if (fastReply < 5 && avgPerDay > 25) pace = 'steady';
+  else if (avgPerDay < 15) pace = 'slow-burn';
+  else pace = 'mid-tempo';
+
+  if (nightPct > 0.25) primeTime = 'night-owl';
+  else if (morningPct > 0.30) primeTime = 'morning-people';
+  else if (eveningPct > 0.35) primeTime = '9pm';
+  else primeTime = 'all-day';
+
+  if (topTopic && topTopic[0] === 'affection') character = 'sentimental';
+  else if (topTopic && topTopic[0] === 'logistics') character = 'logistical';
+  else if (topTopic && topTopic[0] === 'jokes / lol') character = 'comedy duo';
+  else if (topTopic && topTopic[0] === 'planning') character = 'planning duo';
+  else if (topTopic && topTopic[0] === 'work / vent') character = 'co-vent';
+  else character = 'all-purpose';
+
+  const peakYear = Object.entries(stats.yearly).sort((a,b)=>b[1]-a[1])[0];
+  const peakYearStr = peakYear ? peakYear[0] : '';
+
+  const verdict = `You're a ${pace}, ${primeTime} ${character} couple who peaked in ${peakYearStr}.`;
+
+  return { verdict, pace, primeTime, character, peakYear: peakYearStr };
+}
+
+function generateNarratorLines(stats, A, B) {
+  const lines = {};
+  const avgPerDay = stats.total / stats.days;
+  const pctA = stats.countA / stats.total;
+
+  if (pctA > 0.58) lines.receipts = `${A} did ${Math.round(pctA*100)}% of the talking. ${B}'s the listener.`;
+  else if (pctA < 0.42) lines.receipts = `${B} did ${Math.round((1-pctA)*100)}% of the talking. ${A}'s the listener.`;
+  else lines.receipts = `Pretty even split. The mark of a real conversation.`;
+
+  const peakYr = Object.entries(stats.yearly).sort((a,b) => b[1]-a[1])[0];
+  if (peakYr) {
+    const recentYr = Math.max(...Object.keys(stats.yearly).map(Number));
+    const peakCount = peakYr[1];
+    const recentCount = stats.yearly[recentYr];
+    if (recentCount < peakCount * 0.4) lines.pulse = `Peaked in ${peakYr[0]}. Quieter now — ${Math.round(peakCount/recentCount)}× less than the loudest year. Same love, fewer words.`;
+    else lines.pulse = `Peaked in ${peakYr[0]}. Still going strong.`;
+  }
+
+  if (stats.phases && stats.phases.length >= 3) {
+    lines.phases = `Three distinct chapters in your story. Each one had its own rhythm.`;
+  }
+
+  let topHr = 0, topV = 0;
+  for (let d = 0; d < 7; d++) for (let h = 0; h < 24; h++) if (stats.hourDay[d][h] > topV) { topV = stats.hourDay[d][h]; topHr = h; }
+  if (topHr >= 21 || topHr <= 4) lines.heatmap = `You're night-text people. The good kind.`;
+  else if (topHr >= 6 && topHr <= 10) lines.heatmap = `Morning texters. Rare. Most couples don't say a word until lunch.`;
+  else if (topHr >= 12 && topHr <= 17) lines.heatmap = `Workday texters. The "thinking of you between meetings" kind.`;
+
+  if (stats.convergence && stats.convergence.length >= 3) {
+    const first = stats.convergence[0].jaccard;
+    const last = stats.convergence[stats.convergence.length-1].jaccard;
+    if (last > first * 1.15) lines.convergence = `Your vocabulary fused. You don't just sound like each other now — you literally use the same words.`;
+    else if (last < first * 0.85) lines.convergence = `Diverged. Either you both grew, or one of you took up new hobbies.`;
+    else lines.convergence = `Vocabularies stayed steady. You found your shared dialect early.`;
+  }
+
+  if (stats.medianLatencyA && stats.medianLatencyB) {
+    const ratio = Math.max(stats.medianLatencyA, stats.medianLatencyB) / Math.max(Math.min(stats.medianLatencyA, stats.medianLatencyB), 0.5);
+    if (ratio > 3) {
+      const eager = stats.medianLatencyA < stats.medianLatencyB ? A : B;
+      lines.latency = `${eager} replies way faster. Reading too much into this would be a mistake. (Maybe.)`;
+    } else lines.latency = `Reply speeds within shouting distance. Mutual phone-checking energy.`;
+  }
+
+  if (stats.silences[0]) {
+    const days = stats.silences[0].days;
+    if (days > 14) lines.silences = `${days} days is a long time. Trip? Fight? Phone broken? Only you know.`;
+    else if (days > 5) lines.silences = `${days} days quiet. Probably a vacation together — when you're in the same room, you don't text.`;
+    else lines.silences = `Even your longest silence was just ${days} days. You don't really go quiet on each other.`;
+  }
+
+  if (avgPerDay > 50) lines.book = `${Math.round(avgPerDay)} messages a day, every day. That's a novel a year.`;
+  else if (avgPerDay < 10) lines.book = `Quieter pace, but every word is signal.`;
+
+  return lines;
 }
 
 function detectPhases(daily) {
@@ -674,6 +1003,7 @@ function initStories() {
     drawMirror();
     drawConvergence();
     drawConstellation();
+    drawTopics();
     setupScrubber();
   }, 100);
 }
@@ -746,6 +1076,8 @@ function buildSlides() {
   const convDelta = ((lastConv.jaccard - firstConv.jaccard) / Math.max(firstConv.jaccard, 0.001) * 100).toFixed(0);
 
   const phases = STATS.phases.slice(0, 5);
+  const N = STATS.narrator || {};
+  const narratorBlock = (key) => N[key] ? `<div class="narrator">${esc(N[key])}</div>` : '';
 
   const slides = [
     {
@@ -760,15 +1092,35 @@ function buildSlides() {
           <div class="cover-monogram">${esc(MONOGRAM)}</div>
           <div class="cover-title">${esc(NAME_A)}<br/>&amp; ${esc(NAME_B)}.</div>
           <div class="cover-sub">${formatRange(STATS.firstDate, STATS.lastDate)}</div>
-          <div class="cover-pill">${fmt(STATS.total)} messages · 13 chapters</div>
+          <div class="cover-pill">${fmt(STATS.total)} messages · 17 chapters</div>
         </div>
         <div class="s-footer"><span class="s-monogram">${esc(MONOGRAM)}</span><span>tap →</span></div>
       `
     },
     {
+      id: 'firstlast',
+      html: `
+        <div class="s-meta">Chapter I · Where it started, where we are</div>
+        <div class="s-title">First text<br/>vs last text.</div>
+        <div class="firstlast-wrap">
+          <div class="fl-card first">
+            <div class="fl-meta">The very first one</div>
+            <div class="fl-bubble"><div class="who">${esc(STATS.firstMsg.sender)}</div>${esc((STATS.firstMsg.body||'').slice(0, 200))}</div>
+            <div class="fl-date">${STATS.firstMsg.date.toLocaleDateString('en',{month:'long',day:'numeric',year:'numeric'})}</div>
+          </div>
+          <div class="fl-card last">
+            <div class="fl-meta">The most recent one</div>
+            <div class="fl-bubble"><div class="who">${esc(STATS.lastMsg.sender)}</div>${esc((STATS.lastMsg.body||'').slice(0, 200))}</div>
+            <div class="fl-date">${STATS.lastMsg.date.toLocaleDateString('en',{month:'long',day:'numeric',year:'numeric'})}</div>
+          </div>
+        </div>
+        <div class="s-footer"><span class="s-monogram">${esc(MONOGRAM)}</span><button class="save-btn" data-save="firstlast">Save</button></div>
+      `
+    },
+    {
       id: 'receipts',
       html: `
-        <div class="s-meta">Chapter I · The receipts</div>
+        <div class="s-meta">Chapter II · The receipts</div>
         <div class="s-title">By the<br/>numbers.</div>
         <div class="receipt-grid">
           <div class="receipt"><div class="receipt-num">${fmt(STATS.total)}</div><div class="receipt-lbl">Messages</div></div>
@@ -786,14 +1138,15 @@ function buildSlides() {
           <span>${esc(NAME_A)} ${(pctA*100).toFixed(0)}%</span>
           <span>${(((1-pctA))*100).toFixed(0)}% ${esc(NAME_B)}</span>
         </div>
+        ${narratorBlock('receipts')}
         <div class="s-footer"><span class="s-monogram">${esc(MONOGRAM)}</span><button class="save-btn" data-save="receipts">Save</button></div>
       `
     },
     {
       id: 'pulse',
       html: `
-        <div class="s-meta">Chapter II · The pulse</div>
-        <div class="s-title">Twelve years,<br/>one heartbeat.</div>
+        <div class="s-meta">Chapter III · The pulse</div>
+        <div class="s-title">${yrs} years,<br/>one heartbeat.</div>
         <div class="s-deck">Drag the dot to time-travel.</div>
         <div class="pulse-wrap">
           <canvas id="pulse-canvas"></canvas>
@@ -804,17 +1157,18 @@ function buildSlides() {
             <div class="tm-stat">that day<strong id="tm-stat">—</strong></div>
           </div>
         </div>
+        ${narratorBlock('pulse')}
         <div class="s-footer"><span class="s-monogram">${esc(MONOGRAM)}</span><button class="save-btn" data-save="pulse">Save</button></div>
       `
     },
     {
       id: 'phases',
       html: `
-        <div class="s-meta">Chapter III · The phases</div>
+        <div class="s-meta">Chapter IV · The phases</div>
         <div class="s-title">The eras<br/>of us.</div>
         <div class="s-deck">Auto-detected from when our texting rhythm changed.</div>
         <div class="phase-list">
-          ${phases.map((p, i) => {
+          ${phases.map((p) => {
             const isPeak = p.name === 'The High Tide';
             const isDip = p.name === 'The Quiet Years';
             const cls = isPeak ? 'peak' : isDip ? 'dip' : '';
@@ -825,13 +1179,14 @@ function buildSlides() {
             </div>`;
           }).join('')}
         </div>
+        ${narratorBlock('phases')}
         <div class="s-footer"><span class="s-monogram">${esc(MONOGRAM)}</span><button class="save-btn" data-save="phases">Save</button></div>
       `
     },
     {
       id: 'mirror',
       html: `
-        <div class="s-meta">Chapter IV · The mirror</div>
+        <div class="s-meta">Chapter V · The mirror</div>
         <div class="s-title">Two voices,<br/>mirrored.</div>
         <div class="s-deck">${esc(NAME_A)} above the line, ${esc(NAME_B)} below — by month.</div>
         <div class="mirror-wrap">
@@ -847,7 +1202,7 @@ function buildSlides() {
     {
       id: 'heatmap',
       html: `
-        <div class="s-meta">Chapter V · When we text</div>
+        <div class="s-meta">Chapter VI · When we text</div>
         <div class="s-title">The ${hrLabel}<br/>spike.</div>
         <div class="s-deck">Each square is one hour of one weekday.</div>
         <div class="heat-wrap">
@@ -855,29 +1210,87 @@ function buildSlides() {
           <div class="heat-axis">${axisHtml}</div>
           <div class="heat-callout">Loudest hour: <strong>${fullDays[topDay]} at ${hrLabel}</strong> · ~${avgAtTop} msgs on a typical one.</div>
         </div>
+        ${narratorBlock('heatmap')}
         <div class="s-footer"><span class="s-monogram">${esc(MONOGRAM)}</span><button class="save-btn" data-save="heatmap">Save</button></div>
+      `
+    },
+    {
+      id: 'supercut',
+      html: STATS.supercut ? `
+        <div class="s-meta">Chapter VII · The supercut</div>
+        <div class="s-title">Our loudest<br/>hour.</div>
+        <div class="s-deck">${STATS.supercut.totalThatDay} messages on ${new Date(STATS.supercut.date).toLocaleDateString('en',{month:'long',day:'numeric',year:'numeric'})}. Here's how the burst started.</div>
+        <div class="supercut-frame" id="supercut-frame">
+          <div style="text-align:center; margin-bottom:12px;"><span class="supercut-date">${new Date(STATS.supercut.date).toLocaleDateString('en',{weekday:'long', month:'long', day:'numeric'})}</span></div>
+          <div class="sc-stack" id="sc-stack"></div>
+          <div class="supercut-overlay"></div>
+        </div>
+        <div class="s-footer"><span class="s-monogram">${esc(MONOGRAM)}</span><button class="save-btn" data-save="supercut">Save</button></div>
+      ` : `
+        <div class="s-meta">Chapter VII · The supercut</div>
+        <div class="s-title">Quiet day.</div>
+        <div class="s-deck">No big enough burst to replay. Most days were measured.</div>
+        <div class="s-footer"><span class="s-monogram">${esc(MONOGRAM)}</span></div>
+      `
+    },
+    {
+      id: 'topics',
+      html: `
+        <div class="s-meta">Chapter VIII · What we actually talk about</div>
+        <div class="s-title">The mix.</div>
+        <div class="s-deck">Six categories, year by year. Watch how the ratio shifts.</div>
+        <div class="topics-wrap">
+          <canvas id="topics-canvas"></canvas>
+          <div class="topics-legend" id="topics-legend"></div>
+        </div>
+        <div class="s-footer"><span class="s-monogram">${esc(MONOGRAM)}</span><button class="save-btn" data-save="topics">Save</button></div>
       `
     },
     {
       id: 'convergence',
       html: `
-        <div class="s-meta">Chapter VI · The convergence</div>
-        <div class="s-title">We're<br/>becoming<br/>one voice.</div>
+        <div class="s-meta">Chapter IX · The convergence</div>
+        <div class="s-title">Becoming<br/>one voice.</div>
         <div class="s-deck">Word overlap between us, year by year. Couples talk more alike over time — here's our curve.</div>
-        <div class="conv-wrap">
-          <canvas id="conv-canvas"></canvas>
-        </div>
+        <div class="conv-wrap"><canvas id="conv-canvas"></canvas></div>
         <div class="conv-stat">
           <div class="pct">${convDelta > 0 ? '+' : ''}${convDelta}%</div>
           <div class="lbl">Vocabulary overlap, '${String(firstConv.year || '').slice(2)} → '${String(lastConv.year || '').slice(2)}</div>
         </div>
+        ${narratorBlock('convergence')}
         <div class="s-footer"><span class="s-monogram">${esc(MONOGRAM)}</span><button class="save-btn" data-save="convergence">Save</button></div>
+      `
+    },
+    {
+      id: 'signature',
+      html: (STATS.signatureA.length > 0 || STATS.signatureB.length > 0) ? `
+        <div class="s-meta">Chapter X · The signature phrases</div>
+        <div class="s-title">Things we<br/>only say.</div>
+        <div class="s-deck">Phrases each of you uses way more than the other. Statistically yours.</div>
+        <div class="sig-pair">
+          ${STATS.signatureA[0] ? `<div class="sig-block">
+            <div class="sig-who">${esc(NAME_A)} says</div>
+            <div class="sig-quote">${esc(STATS.signatureA[0].phrase)}</div>
+            <div class="sig-meta">${STATS.signatureA[0].mine}× from ${esc(NAME_A)} · ${STATS.signatureA[0].theirs}× from ${esc(NAME_B)}</div>
+          </div>` : ''}
+          ${STATS.signatureB[0] ? `<div class="sig-block b">
+            <div class="sig-who">${esc(NAME_B)} says</div>
+            <div class="sig-quote">${esc(STATS.signatureB[0].phrase)}</div>
+            <div class="sig-meta">${STATS.signatureB[0].mine}× from ${esc(NAME_B)} · ${STATS.signatureB[0].theirs}× from ${esc(NAME_A)}</div>
+          </div>` : ''}
+        </div>
+        <div class="s-footer"><span class="s-monogram">${esc(MONOGRAM)}</span><button class="save-btn" data-save="signature">Save</button></div>
+      ` : `
+        <div class="s-meta">Chapter X · The signature phrases</div>
+        <div class="s-title">No clear<br/>signature.</div>
+        <div class="s-deck">Your phrasing patterns are too similar to tease apart — or the chat's too short. Either way, you sound a lot alike.</div>
+        <div class="s-footer"><span class="s-monogram">${esc(MONOGRAM)}</span></div>
       `
     },
     {
       id: 'ours',
       html: `
-        <div class="s-meta">Chapter VII · Our dictionary</div>
+        <div class="s-meta">Chapter XI · Our dictionary</div>
         <div class="s-title">Words that<br/>are ours.</div>
         <div class="s-deck">Used a lot, by both of us. Statistically, this is how we talk.</div>
         <div class="ours-cloud">${oursHtml}</div>
@@ -887,7 +1300,7 @@ function buildSlides() {
     {
       id: 'emoji',
       html: `
-        <div class="s-meta">Chapter VIII · The emojis</div>
+        <div class="s-meta">Chapter XII · The emojis</div>
         <div class="s-title">Us in nine<br/>glyphs.</div>
         <div class="emoji-grid">
           ${topEmojis.map(([e,c]) => `<div class="emoji-card"><div class="emoji-glyph">${e}</div><div class="emoji-count">${fmt(c)}</div></div>`).join('')}
@@ -898,7 +1311,7 @@ function buildSlides() {
     {
       id: 'latency',
       html: `
-        <div class="s-meta">Chapter IX · Reply time</div>
+        <div class="s-meta">Chapter XIII · Reply time</div>
         <div class="s-title">Who's the<br/>eager one?</div>
         <div style="display:flex; gap:14px; margin-top:14px;">
           <div style="flex:1; background:var(--paper-warm); border:1.5px solid var(--ink); border-radius:12px; padding:16px; text-align:center;">
@@ -910,17 +1323,18 @@ function buildSlides() {
             <div style="font-family:'Fraunces',serif; font-style:italic; font-size:34px; color:var(--ink); font-weight:500; margin-top:6px;">${fmtMin(lB)}</div>
           </div>
         </div>
-        <div style="margin-top:auto; text-align:center; padding:18px 0;">
-          <div style="font-family:'Fraunces',serif; font-style:italic; font-size:22px; color:var(--ink); line-height:1.3;">${eagerLine}</div>
-          <div style="font-size:11px; color:var(--ink-soft); margin-top:8px;">Median reply within 30 minutes.</div>
+        <div style="margin-top:18px; text-align:center;">
+          <div style="font-family:'Fraunces',serif; font-style:italic; font-size:20px; color:var(--ink); line-height:1.3;">${eagerLine}</div>
+          <div style="font-size:11px; color:var(--ink-soft); margin-top:6px;">Median reply within 30 minutes.</div>
         </div>
+        ${narratorBlock('latency')}
         <div class="s-footer"><span class="s-monogram">${esc(MONOGRAM)}</span><button class="save-btn" data-save="latency">Save</button></div>
       `
     },
     {
       id: 'bigdays',
       html: `
-        <div class="s-meta">Chapter X · The big days</div>
+        <div class="s-meta">Chapter XIV · The big days</div>
         <div class="s-title">The five<br/>loudest days.</div>
         <div class="s-deck">Add a label and tell yourself what happened.</div>
         <div class="bigday-list">
@@ -943,7 +1357,7 @@ function buildSlides() {
     {
       id: 'silences',
       html: `
-        <div class="s-meta">Chapter XI · The silences</div>
+        <div class="s-meta">Chapter XV · The silences</div>
         <div class="s-title">Even gaps<br/>tell stories.</div>
         <div class="silence-card">
           <div class="silence-num">${topSilence.days}</div>
@@ -960,26 +1374,71 @@ function buildSlides() {
             <div style="font-size:9px; letter-spacing:0.15em; color:var(--ink); text-transform:uppercase; font-weight:600; margin-top:4px;">Total quiet days</div>
           </div>
         </div>
+        ${narratorBlock('silences')}
         <div class="s-footer"><span class="s-monogram">${esc(MONOGRAM)}</span><button class="save-btn" data-save="silences">Save</button></div>
+      `
+    },
+    {
+      id: 'fingerprints',
+      html: `
+        <div class="s-meta">Chapter XVI · The fingerprints</div>
+        <div class="s-title">Every year,<br/>a shape.</div>
+        <div class="s-deck">Each year drawn as the curve of when we texted that year. No two are alike.</div>
+        <div class="fp-grid">
+          ${STATS.fingerprints.map(fp => {
+            const max = Math.max(...fp.hours);
+            const isPeak = fp.year === +STATS.verdict.peakYear;
+            let path = '';
+            fp.hours.forEach((h, i) => {
+              const x = (i / 23) * 60;
+              const y = 40 - (h / max) * 35;
+              path += (i === 0 ? 'M' : 'L') + x + ',' + y + ' ';
+            });
+            return `<div class="fp-card ${isPeak ? 'peak' : ''}">
+              <svg class="fp-svg" viewBox="0 0 60 50" preserveAspectRatio="none">
+                <path d="${path}" fill="none" stroke="${isPeak ? PALETTE.pink : PALETTE.ink}" stroke-width="1.5" stroke-linejoin="round" />
+              </svg>
+              <div class="fp-yr">'${String(fp.year).slice(2)}</div>
+            </div>`;
+          }).join('')}
+        </div>
+        <div class="s-footer"><span class="s-monogram">${esc(MONOGRAM)}</span><button class="save-btn" data-save="fingerprints">Save</button></div>
+      `
+    },
+    {
+      id: 'quotegame',
+      html: STATS.quotes.length >= 3 ? `
+        <div class="s-meta">Chapter XVII · How well do you know each other?</div>
+        <div class="s-title">Who<br/>said it?</div>
+        <div class="s-deck">Five real messages from your chat. Guess the sender.</div>
+        <div class="qg-wrap" id="qg-wrap"></div>
+        <div class="qg-progress" id="qg-progress"></div>
+        <div class="s-footer"><span class="s-monogram">${esc(MONOGRAM)}</span><span></span></div>
+      ` : `
+        <div class="s-meta">Chapter XVII · The game</div>
+        <div class="s-title">Not enough<br/>quotes.</div>
+        <div class="s-deck">Need a longer chat to play this one. Come back when you've got more material.</div>
+        <div class="s-footer"><span class="s-monogram">${esc(MONOGRAM)}</span></div>
       `
     },
     {
       id: 'book',
       html: `
-        <div class="s-meta">Chapter XII · If we were a book</div>
+        <div class="s-meta">Chapter XVIII · If we were a book</div>
         <div class="s-title">${fmt(pages)}<br/>pages.</div>
         <div class="book-stat">
           <div class="pages">${fmt(totalWords)}</div>
           <div class="pages-lbl">Words written, just to each other</div>
           <div class="vs">That's about <strong>${ratio}× ${closest.name}</strong>.</div>
         </div>
+        ${narratorBlock('book')}
         <div class="s-footer"><span class="s-monogram">${esc(MONOGRAM)}</span><button class="save-btn" data-save="book">Save</button></div>
       `
     },
     {
       id: 'constellation',
       html: `
-        <div class="s-meta">Chapter XIII · The constellation</div>
+        <div class="s-meta">Chapter XIX · The constellation</div>
         <div class="s-title">All of us,<br/>at once.</div>
         <div class="s-deck">Every message as a point. Day across, hour down. ${esc(NAME_A)} in pink, ${esc(NAME_B)} in gold.</div>
         <div class="const-wrap">
@@ -990,6 +1449,19 @@ function buildSlides() {
           </div>
         </div>
         <div class="s-footer"><span class="s-monogram">${esc(MONOGRAM)}</span><button class="save-btn" data-save="constellation">Save print</button></div>
+      `
+    },
+    {
+      id: 'verdict',
+      html: `
+        <div class="s-meta">Chapter XX · The verdict</div>
+        <div class="s-title" style="font-size:32px;">In one<br/>sentence.</div>
+        <div class="verdict-card">
+          <div class="verdict-label">The diagnosis</div>
+          <div class="verdict-text">${esc(STATS.verdict.verdict)}</div>
+          <div class="verdict-mono">${esc(MONOGRAM)} · ${fmt(STATS.total)} messages</div>
+        </div>
+        <div class="s-footer"><span class="s-monogram">${esc(MONOGRAM)}</span><button class="save-btn" data-save="verdict">Save</button></div>
       `
     },
     {
@@ -1042,11 +1514,15 @@ function showSlide(idx) {
 
   if (slides[idx]) {
     const id = slides[idx].dataset.idx;
-    const slideId = ['cover','receipts','pulse','phases','mirror','heatmap','convergence','ours','emoji','latency','bigdays','silences','book','constellation','fin'][+id];
+    const slideIds = ['cover','firstlast','receipts','pulse','phases','mirror','heatmap','supercut','topics','convergence','signature','ours','emoji','latency','bigdays','silences','fingerprints','quotegame','book','constellation','verdict','fin'];
+    const slideId = slideIds[+id];
     if (slideId === 'pulse') { drawPulse(); setupScrubber(); }
     if (slideId === 'mirror') drawMirror();
     if (slideId === 'convergence') drawConvergence();
     if (slideId === 'constellation') drawConstellation();
+    if (slideId === 'topics') drawTopics();
+    if (slideId === 'supercut') playSupercut();
+    if (slideId === 'quotegame') initQuoteGame();
   }
 
   clearTimeout(SLIDE_TIMER);
@@ -1452,9 +1928,145 @@ function setupMusic() {
   };
 }
 
+function playSupercut() {
+  const stack = $('sc-stack');
+  if (!stack || !STATS.supercut) return;
+  stack.innerHTML = '';
+  STATS.supercut.messages.forEach((m, i) => {
+    setTimeout(() => {
+      if (!$('sc-stack')) return;
+      const div = document.createElement('div');
+      const isA = m.sender === NAME_A;
+      div.className = 'sc-bubble ' + (isA ? 'left' : 'right');
+      div.style.animationDelay = '0s';
+      const time = new Date(m.time).toLocaleTimeString('en', { hour: 'numeric', minute: '2-digit', hour12: true }).toLowerCase();
+      div.innerHTML = `${esc(m.body)}<div class="sc-time">${time}</div>`;
+      $('sc-stack').appendChild(div);
+    }, i * 350);
+  });
+}
+
+function drawTopics() {
+  const canvas = $('topics-canvas');
+  if (!canvas) return;
+  const dpr = window.devicePixelRatio || 1;
+  const W = canvas.parentElement.clientWidth - 24;
+  const H = 200;
+  canvas.width = W*dpr; canvas.height = H*dpr;
+  canvas.style.width = W+'px'; canvas.style.height = H+'px';
+  const ctx = canvas.getContext('2d'); ctx.scale(dpr, dpr);
+
+  const yrs = Object.keys(STATS.topicMix).sort();
+  const topics = ['logistics', 'affection', 'planning', 'work / vent', 'jokes / lol', 'check-in', 'other'];
+  const colors = ['#3D5AFE', '#FF4D8F', '#F5B700', '#E63946', '#7A8B5E', '#9B6FD9', '#B8B5A0'];
+
+  if (!yrs.length) return;
+  const padL = 30, padR = 10, padT = 14, padB = 24;
+  const plotW = W - padL - padR, plotH = H - padT - padB;
+  const barW = plotW / yrs.length * 0.78;
+
+  yrs.forEach((yr, i) => {
+    const data = STATS.topicMix[yr];
+    const total = data.total || 1;
+    const x = padL + (i + 0.5) * (plotW / yrs.length);
+    let cumY = padT + plotH;
+    topics.forEach((topic, ti) => {
+      const v = data[topic] || 0;
+      const h = (v / total) * plotH;
+      ctx.fillStyle = colors[ti];
+      ctx.fillRect(x - barW/2, cumY - h, barW, h);
+      cumY -= h;
+    });
+    ctx.fillStyle = PALETTE.ink;
+    ctx.font = '600 9px Inter';
+    ctx.textAlign = 'center';
+    if (yrs.length <= 8 || i % Math.ceil(yrs.length / 6) === 0) ctx.fillText(`'${String(yr).slice(2)}`, x, H - 8);
+  });
+
+  ctx.fillStyle = 'rgba(27, 67, 50, 0.5)';
+  ctx.font = '9px Inter'; ctx.textAlign = 'right';
+  ctx.fillText('100%', padL - 4, padT + 4);
+  ctx.fillText('0%', padL - 4, padT + plotH);
+
+  const legendEl = $('topics-legend');
+  if (legendEl && !legendEl.dataset.set) {
+    legendEl.innerHTML = topics.map((t, i) => `<span><span class="dot" style="background:${colors[i]}"></span>${t}</span>`).join('');
+    legendEl.dataset.set = '1';
+  }
+}
+
+let QG_STATE = null;
+
+function initQuoteGame() {
+  if (!STATS.quotes || STATS.quotes.length < 3) return;
+  if (QG_STATE) return;
+  QG_STATE = { idx: 0, score: 0, results: [] };
+  renderQuoteGame();
+}
+
+function renderQuoteGame() {
+  const wrap = $('qg-wrap');
+  const prog = $('qg-progress');
+  if (!wrap || !prog) return;
+
+  if (QG_STATE.idx >= STATS.quotes.length) {
+    const score = QG_STATE.score;
+    const total = STATS.quotes.length;
+    let verdict;
+    const pct = score / total;
+    if (pct === 1) verdict = `Perfect. You know each other's voice exactly.`;
+    else if (pct >= 0.8) verdict = `You really know each other.`;
+    else if (pct >= 0.6) verdict = `Pretty good. There's still mystery left.`;
+    else if (pct >= 0.4) verdict = `Coin-flip territory. You sound more alike than you think.`;
+    else verdict = `Statistically, you sound like the same person. That's a kind of intimacy too.`;
+    wrap.innerHTML = `<div class="qg-result">
+      <div class="qg-score">${score}/${total}</div>
+      <div class="qg-verdict">${verdict}</div>
+    </div>`;
+    prog.innerHTML = QG_STATE.results.map(r => `<div class="qg-dot ${r ? 'right' : 'wrong'}"></div>`).join('');
+    return;
+  }
+
+  const q = STATS.quotes[QG_STATE.idx];
+  wrap.innerHTML = `
+    <div class="qg-prompt">Who said it? · ${QG_STATE.idx + 1} of ${STATS.quotes.length}</div>
+    <div class="qg-quote">"${esc(q.body)}"</div>
+    <div class="qg-buttons">
+      <button class="qg-btn" data-guess="${esc(NAME_A)}">${esc(NAME_A)}</button>
+      <button class="qg-btn" data-guess="${esc(NAME_B)}">${esc(NAME_B)}</button>
+    </div>
+  `;
+  prog.innerHTML = STATS.quotes.map((_, i) => {
+    if (i < QG_STATE.idx) return `<div class="qg-dot ${QG_STATE.results[i] ? 'right' : 'wrong'}"></div>`;
+    return `<div class="qg-dot"></div>`;
+  }).join('');
+
+  wrap.querySelectorAll('.qg-btn').forEach(btn => {
+    btn.onclick = (e) => {
+      e.stopPropagation();
+      const guess = btn.dataset.guess;
+      const correct = guess === q.sender;
+      QG_STATE.results.push(correct);
+      if (correct) { QG_STATE.score++; btn.classList.add('correct'); }
+      else {
+        btn.classList.add('wrong');
+        wrap.querySelectorAll('.qg-btn').forEach(b => { if (b.dataset.guess === q.sender) b.classList.add('show-correct'); });
+      }
+      wrap.querySelectorAll('.qg-btn').forEach(b => b.classList.add('disabled'));
+      PAUSED = true;
+      clearTimeout(SLIDE_TIMER);
+      setTimeout(() => {
+        QG_STATE.idx++;
+        renderQuoteGame();
+        if (QG_STATE.idx >= STATS.quotes.length) PAUSED = false;
+      }, 1100);
+    };
+  });
+}
+
 window.addEventListener('resize', () => {
   if ($('stories').style.display === 'flex') {
-    drawPulse(); drawMirror(); drawConvergence(); drawConstellation();
+    drawPulse(); drawMirror(); drawConvergence(); drawConstellation(); drawTopics();
   }
 });
 </script>
