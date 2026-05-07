@@ -333,6 +333,168 @@
   .fin-btn { background: var(--paper-warm); color: var(--ink); border: 1.5px solid var(--ink); padding: 8px 14px; border-radius: 18px; font-size: 11px; font-weight: 600; cursor: pointer; letter-spacing: 0.05em; }
   .fin-btn:hover { background: var(--mustard); }
 
+  /* ===== TIP BUTTON + MODAL ===== */
+  .tip-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 22px;
+    background: transparent;
+    color: var(--ink-soft);
+    border: none;
+    font-family: inherit;
+    font-size: 12px;
+    cursor: pointer;
+    padding: 6px 10px;
+    border-bottom: 1px dotted var(--ink-soft);
+  }
+  .tip-link:hover { color: var(--pink); border-color: var(--pink); }
+  .tip-link .heart { color: var(--pink); }
+
+  .tip-modal-bg {
+    position: absolute;
+    inset: 0;
+    background: rgba(27, 67, 50, 0.65);
+    z-index: 50;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    border-radius: 14px;
+  }
+  .tip-modal-bg.show { display: flex; }
+  .tip-modal {
+    background: var(--bone);
+    border: 2px solid var(--ink);
+    border-radius: 16px;
+    padding: 22px 20px;
+    max-width: 340px;
+    width: 100%;
+    text-align: center;
+    position: relative;
+  }
+  .tip-close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--ink);
+    color: var(--bone);
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .tip-modal h3 {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 24px;
+    color: var(--ink);
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+  .tip-modal .tip-sub {
+    font-size: 12px;
+    color: var(--ink-soft);
+    margin-bottom: 16px;
+    line-height: 1.4;
+  }
+  .tip-chain {
+    background: var(--paper-warm);
+    border: 1.5px solid var(--ink);
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 10px;
+    text-align: left;
+  }
+  .tip-chain.solana { background: var(--mustard); }
+  .tip-chain-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .tip-chain-badge {
+    background: var(--ink);
+    color: var(--bone);
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 10px;
+  }
+  .tip-chain-asset {
+    font-size: 10px;
+    color: var(--ink-soft);
+    font-weight: 500;
+  }
+  .tip-addr-row {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .tip-addr {
+    flex: 1;
+    background: var(--bone);
+    border: 1px solid rgba(27, 67, 50, 0.2);
+    border-radius: 6px;
+    padding: 7px 9px;
+    font-family: monospace;
+    font-size: 11px;
+    color: var(--ink);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .tip-copy {
+    background: var(--ink);
+    color: var(--bone);
+    border: none;
+    border-radius: 6px;
+    padding: 7px 12px;
+    font-size: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+  .tip-copy:hover { background: var(--pink); }
+  .tip-copy.copied { background: var(--mustard); color: var(--ink); }
+  .tip-qr-toggle {
+    margin-top: 8px;
+    background: transparent;
+    border: 1px dashed var(--ink-soft);
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 10px;
+    color: var(--ink-soft);
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .tip-qr-toggle:hover { border-color: var(--pink); color: var(--pink); }
+  .tip-qr {
+    display: none;
+    margin-top: 8px;
+    padding: 8px;
+    background: white;
+    border-radius: 6px;
+    text-align: center;
+  }
+  .tip-qr.show { display: block; }
+  .tip-qr canvas { display: block; margin: 0 auto; }
+  .tip-thanks {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-top: 12px;
+  }
+
   /* ===== MUSIC CONTROL ===== */
   .music-bar { position: absolute; bottom: 14px; left: 14px; right: 14px; background: var(--ink); color: var(--bone); border-radius: 22px; padding: 8px 14px; display: flex; align-items: center; gap: 10px; z-index: 30; font-size: 11px; }
   .music-bar.hidden { display: none; }
@@ -526,11 +688,48 @@
       <button class="music-option" data-music="upload">Upload your own mp3</button>
       <input type="file" id="music-upload" accept="audio/*" style="display:none" />
     </div>
+
+    <div class="tip-modal-bg" id="tip-modal-bg">
+      <div class="tip-modal">
+        <button class="tip-close" id="tip-close">×</button>
+        <h3>Thank you 🥹</h3>
+        <div class="tip-sub">Built by one person, on weekends. Any tip = a coffee + a smile.</div>
+
+        <div class="tip-chain">
+          <div class="tip-chain-head">
+            <span class="tip-chain-badge">Base</span>
+            <span class="tip-chain-asset">USDC, ETH, anything EVM</span>
+          </div>
+          <div class="tip-addr-row">
+            <div class="tip-addr" id="tip-addr-base" title="sumsur.eth">sumsur.eth</div>
+            <button class="tip-copy" data-copy="sumsur.eth" data-target="tip-addr-base">Copy</button>
+          </div>
+          <button class="tip-qr-toggle" data-qr="qr-base">show QR</button>
+          <div class="tip-qr" id="qr-base"></div>
+        </div>
+
+        <div class="tip-chain solana">
+          <div class="tip-chain-head">
+            <span class="tip-chain-badge">Solana</span>
+            <span class="tip-chain-asset">USDC, SOL</span>
+          </div>
+          <div class="tip-addr-row">
+            <div class="tip-addr" id="tip-addr-sol" title="FBMkpTHKRZQtRifLmcZxYzU5bZ52GqqQKJrt1pW34ERx">FBMkpT...4ERx</div>
+            <button class="tip-copy" data-copy="FBMkpTHKRZQtRifLmcZxYzU5bZ52GqqQKJrt1pW34ERx" data-target="tip-addr-sol">Copy</button>
+          </div>
+          <button class="tip-qr-toggle" data-qr="qr-sol">show QR</button>
+          <div class="tip-qr" id="qr-sol"></div>
+        </div>
+
+        <div class="tip-thanks">No data shared either way. Just kindness.</div>
+      </div>
+    </div>
   </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
 const $ = (id) => document.getElementById(id);
 const fmt = (n) => n.toLocaleString('en-US');
@@ -1743,6 +1942,7 @@ function buildSlides() {
             <button class="fin-btn" onclick="SLIDE_IDX=0; showSlide(0);">↺ Replay</button>
             <button class="fin-btn" onclick="location.reload()">New chat</button>
           </div>
+          <button class="tip-link" id="tip-open"><span class="heart">♥</span> Liked it? Tip the maker</button>
         </div>
         <div class="s-footer"><span class="s-monogram">${esc(MONOGRAM)}</span><span></span></div>
       `
@@ -1826,6 +2026,50 @@ function setupNav() {
     if (e.target.classList.contains('save-btn')) {
       e.stopPropagation();
       await saveCurrentSlide(e.target);
+    }
+    if (e.target.id === 'tip-open' || e.target.closest('#tip-open')) {
+      e.stopPropagation();
+      const bg = document.getElementById('tip-modal-bg');
+      if (bg) {
+        bg.classList.add('show');
+        PAUSED = true;
+        clearTimeout(SLIDE_TIMER);
+      }
+    }
+    if (e.target.id === 'tip-close' || e.target.id === 'tip-modal-bg') {
+      const bg = document.getElementById('tip-modal-bg');
+      if (bg) bg.classList.remove('show');
+    }
+    if (e.target.classList.contains('tip-copy')) {
+      e.stopPropagation();
+      const text = e.target.dataset.copy;
+      try {
+        await navigator.clipboard.writeText(text);
+        const orig = e.target.textContent;
+        e.target.textContent = '✓ Copied';
+        e.target.classList.add('copied');
+        setTimeout(() => { e.target.textContent = orig; e.target.classList.remove('copied'); }, 1800);
+      } catch (err) {
+        const orig = e.target.textContent;
+        e.target.textContent = 'Failed';
+        setTimeout(() => e.target.textContent = orig, 1800);
+      }
+    }
+    if (e.target.classList.contains('tip-qr-toggle')) {
+      e.stopPropagation();
+      const id = e.target.dataset.qr;
+      const qrEl = document.getElementById(id);
+      if (!qrEl) return;
+      qrEl.classList.toggle('show');
+      if (qrEl.classList.contains('show') && !qrEl.dataset.rendered && window.QRCode) {
+        const isBase = id === 'qr-base';
+        const text = isBase ? 'sumsur.eth' : 'FBMkpTHKRZQtRifLmcZxYzU5bZ52GqqQKJrt1pW34ERx';
+        new QRCode(qrEl, { text, width: 140, height: 140, colorDark: '#1B4332', colorLight: '#ffffff' });
+        qrEl.dataset.rendered = '1';
+        e.target.textContent = 'hide QR';
+      } else if (qrEl.dataset.rendered) {
+        e.target.textContent = qrEl.classList.contains('show') ? 'hide QR' : 'show QR';
+      }
     }
   });
 }
