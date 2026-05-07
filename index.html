@@ -629,6 +629,77 @@
   }
   .share-toast.show { opacity: 1; }
 
+  .share-popup-bg {
+    position: absolute;
+    inset: 0;
+    background: rgba(27, 67, 50, 0.65);
+    z-index: 60;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    border-radius: 14px;
+  }
+  .share-popup {
+    background: var(--bone);
+    border: 2px solid var(--ink);
+    border-radius: 14px;
+    padding: 18px 16px 14px;
+    max-width: 320px;
+    width: 100%;
+    text-align: center;
+    position: relative;
+  }
+  .share-popup-close {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--ink);
+    color: var(--bone);
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    font-weight: 700;
+    line-height: 1;
+    z-index: 2;
+  }
+  .share-popup-preview {
+    margin-bottom: 14px;
+    text-align: center;
+  }
+  .share-popup-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .share-popup-btn {
+    background: var(--bone);
+    border: 1.5px solid var(--ink);
+    color: var(--ink);
+    padding: 12px 14px;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.02em;
+  }
+  .share-popup-btn:hover { background: var(--mustard); }
+  .share-popup-btn.primary { background: var(--pink); color: white; border-color: var(--pink); }
+  .share-popup-btn.primary:hover { background: var(--mustard); color: var(--ink); border-color: var(--ink); }
+  .share-popup-hint {
+    font-size: 11px;
+    color: var(--ink-soft);
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    margin-top: 6px;
+  }
+
   .btn-primary.loading {
     background: var(--ink-soft);
     pointer-events: none;
@@ -2268,9 +2339,6 @@ async function shareCurrentSlide() {
   const slide = document.querySelector('.slide.active');
   const slideId = slide ? slide.dataset.idx : '';
 
-  const SHARE_URL = 'https://story-of-us-gilt.vercel.app';
-  const SHARE_TEXT = 'made my chat into a story 👀 try yours:';
-
   let watermark = null;
   try {
     watermark = document.createElement('div');
@@ -2289,56 +2357,10 @@ async function shareCurrentSlide() {
     const blob = await new Promise(r => canvas.toBlob(r, 'image/png', 0.92));
     if (!blob) throw new Error('Could not make image');
 
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    const file = new File([blob], `stories-of-us.png`, { type: 'image/png' });
-
-    let shared = false;
-
-    if (navigator.share) {
-      try {
-        if (navigator.canShare && navigator.canShare({ files: [file] })) {
-          await navigator.share({
-            files: [file],
-            title: 'The Stories of Us',
-            text: SHARE_TEXT + ' ' + SHARE_URL
-          });
-          shared = true;
-          showToast('Shared!');
-        }
-      } catch (err) {
-        if (err.name === 'AbortError') { shared = true; }
-      }
-
-      if (!shared) {
-        try {
-          await navigator.share({
-            title: 'The Stories of Us',
-            text: SHARE_TEXT,
-            url: SHARE_URL
-          });
-          shared = true;
-          downloadCanvas(canvas, slideId);
-          showToast('Image saved + link shared');
-        } catch (err) {
-          if (err.name === 'AbortError') {
-            shared = true;
-            downloadCanvas(canvas, slideId);
-            showToast('Image saved');
-          }
-        }
-      }
-    }
-
-    if (!shared) {
-      downloadCanvas(canvas, slideId);
-      try { await navigator.clipboard.writeText(SHARE_TEXT + ' ' + SHARE_URL); showToast('Image saved · link copied'); }
-      catch(e) { showToast('Saved · post it!'); }
-    }
-
     btn.classList.remove('busy');
-    btn.classList.add('done');
-    btn.innerHTML = '<span style="font-size:16px; font-weight:700;">✓</span>';
-    setTimeout(() => { btn.classList.remove('done'); btn.innerHTML = origHTML; }, 2000);
+    btn.innerHTML = origHTML;
+
+    showSharePopup(blob, canvas, slideId);
   } catch (e) {
     console.error(e);
     if (watermark && watermark.parentNode) watermark.parentNode.removeChild(watermark);
@@ -2346,6 +2368,72 @@ async function shareCurrentSlide() {
     btn.innerHTML = origHTML;
     showToast('Failed: ' + (e.message || 'unknown'));
   }
+}
+
+function showSharePopup(blob, canvas, slideId) {
+  let popup = document.getElementById('share-popup');
+  if (popup) popup.remove();
+
+  popup = document.createElement('div');
+  popup.id = 'share-popup';
+  popup.className = 'share-popup-bg';
+  popup.innerHTML = `
+    <div class="share-popup">
+      <button class="share-popup-close" id="share-popup-close">×</button>
+      <div class="share-popup-preview"></div>
+      <div class="share-popup-actions">
+        <button class="share-popup-btn primary" id="share-copy-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px; margin-right:6px;"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          Copy image
+        </button>
+        <button class="share-popup-btn" id="share-download-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px; margin-right:6px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          Download
+        </button>
+      </div>
+      <div class="share-popup-hint">Then paste into Instagram, WhatsApp, anywhere.</div>
+    </div>
+  `;
+  document.getElementById('story-frame').appendChild(popup);
+
+  const previewEl = popup.querySelector('.share-popup-preview');
+  const previewImg = document.createElement('img');
+  previewImg.src = canvas.toDataURL('image/png');
+  previewImg.style.cssText = 'max-width:100%; max-height:200px; border-radius:8px; border:1px solid rgba(27,67,50,0.2);';
+  previewEl.appendChild(previewImg);
+
+  document.getElementById('share-popup-close').onclick = (e) => { e.stopPropagation(); popup.remove(); };
+  popup.onclick = (e) => { if (e.target === popup) popup.remove(); };
+
+  document.getElementById('share-copy-btn').onclick = async (e) => {
+    e.stopPropagation();
+    const copyBtn = e.currentTarget;
+    const orig = copyBtn.innerHTML;
+    try {
+      if (!navigator.clipboard || !window.ClipboardItem) {
+        throw new Error('Clipboard images not supported here — use Download instead');
+      }
+      await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
+      copyBtn.innerHTML = '✓ Copied to clipboard';
+      copyBtn.style.background = '#4ade80';
+      copyBtn.style.color = 'var(--ink)';
+      setTimeout(() => { popup.remove(); }, 1100);
+    } catch (err) {
+      copyBtn.innerHTML = '✗ ' + (err.message || 'Copy failed');
+      copyBtn.style.background = 'var(--rose)';
+      copyBtn.style.color = 'white';
+      setTimeout(() => { copyBtn.innerHTML = orig; copyBtn.style.background = ''; copyBtn.style.color = ''; }, 2200);
+    }
+  };
+
+  document.getElementById('share-download-btn').onclick = (e) => {
+    e.stopPropagation();
+    downloadCanvas(canvas, slideId);
+    const dlBtn = e.currentTarget;
+    const orig = dlBtn.innerHTML;
+    dlBtn.innerHTML = '✓ Saved';
+    setTimeout(() => { popup.remove(); }, 900);
+  };
 }
 
 function downloadCanvas(canvas, slideId) {
