@@ -445,7 +445,11 @@
         <span class="net-info" id="net-info">?</span>
       </div>
       <div class="net-explain" id="net-explain">
-        Vercel Analytics + Speed Insights fire a few requests for anonymous pageviews and page-load timing. <strong>Your chat data is never sent</strong> — the badge would turn red if anything went anywhere besides Vercel's analytics endpoints. Verify in your browser's DevTools → Network tab.
+        Vercel Analytics + Speed Insights fire a few requests for anonymous pageviews and page-load timing. <strong>Your chat data is never sent</strong> — the badge would turn red if anything went anywhere besides Vercel's analytics endpoints.
+        <div style="margin-top:10px; padding-top:10px; border-top:1px solid rgba(245,241,232,0.15);">
+          <div style="font-size:10px; opacity:0.7; margin-bottom:6px; letter-spacing:0.05em;">LIVE REQUEST LOG:</div>
+          <div id="net-debug-log" style="max-height:140px; overflow-y:auto;"></div>
+        </div>
       </div>
       <div class="trust-links">
         <a href="https://github.com/sumsur29/story-of-us" target="_blank" rel="noopener" id="src-link">View source on GitHub →</a>
@@ -550,21 +554,36 @@ setTimeout(() => {
   let badCount = 0;
   let lastBadTime = null;
   const startTime = Date.now();
+  const log = [];
 
   const ALLOWED_PATTERNS = [
     /vercel-insights\.com/i,
     /vercel-scripts\.com/i,
     /vercel-analytics\.com/i,
+    /vitals\.vercel/i,
     /\/_vercel\//i,
-    /vitals\.vercel-insights/i,
-    /va\.vercel-scripts/i,
+    /\/insights\//i,
+    /\/va\//i,
+    /\/_next\//i,
+    /fonts\.googleapis\.com/i,
+    /fonts\.gstatic\.com/i,
+    /cdnjs\.cloudflare\.com/i,
   ];
 
   function isAllowed(url) {
     if (!url || typeof url !== 'string') return true;
     if (url.startsWith('blob:') || url.startsWith('data:')) return true;
+    try {
+      const u = new URL(url, location.href);
+      if (u.origin === location.origin) {
+        if (u.pathname === '/' || u.pathname === '/index.html') return true;
+        if (u.pathname.includes('insight') || u.pathname.includes('vercel') || u.pathname.includes('/_') || u.pathname.includes('/va')) return true;
+      }
+    } catch(e) {}
     return ALLOWED_PATTERNS.some(p => p.test(url));
   }
+
+  window.__netLog = log;
 
   function update() {
     const allMonitors = document.querySelectorAll('[id^="net-monitor"]');
@@ -587,6 +606,23 @@ setTimeout(() => {
       allMonitors.forEach(el => el.classList.remove('warn'));
     }
     allTimes.forEach(el => el.textContent = timeText);
+
+    const debugEl = document.getElementById('net-debug-log');
+    if (debugEl) {
+      debugEl.innerHTML = log.length ? log.slice(-8).map(e =>
+        `<div style="font-size:10px; color:${e.ok ? '#4ade80' : 'var(--rose)'}; padding:2px 0; word-break:break-all; font-family:monospace;">${e.ok ? '✓' : '✗'} ${esc(e.url.slice(0, 80))}</div>`
+      ).join('') : '<div style="font-size:10px; opacity:0.5;">No requests yet.</div>';
+    }
+  }
+
+  function track(url) {
+    if (!url || typeof url !== 'string') return;
+    const ok = isAllowed(url);
+    if (ok) okCount++;
+    else { badCount++; lastBadTime = Date.now(); }
+    log.push({ url, ok, time: Date.now() });
+    if (log.length > 50) log.shift();
+    update();
   }
 
   function formatElapsed(ms) {
@@ -600,30 +636,20 @@ setTimeout(() => {
   const origFetch = window.fetch;
   window.fetch = function(...args) {
     const url = (args[0] && args[0].url) || args[0] || '';
-    if (typeof url === 'string') {
-      if (isAllowed(url)) okCount++;
-      else { badCount++; lastBadTime = Date.now(); }
-      update();
-    }
+    track(typeof url === 'string' ? url : '');
     return origFetch.apply(this, args);
   };
 
   const origOpen = XMLHttpRequest.prototype.open;
   XMLHttpRequest.prototype.open = function(method, url, ...rest) {
-    if (typeof url === 'string') {
-      if (isAllowed(url)) okCount++;
-      else { badCount++; lastBadTime = Date.now(); }
-      update();
-    }
+    track(typeof url === 'string' ? url : '');
     return origOpen.call(this, method, url, ...rest);
   };
 
   const origSend = navigator.sendBeacon ? navigator.sendBeacon.bind(navigator) : null;
   if (origSend) {
     navigator.sendBeacon = function(url, data) {
-      if (isAllowed(url)) okCount++;
-      else { badCount++; lastBadTime = Date.now(); }
-      update();
+      track(typeof url === 'string' ? url : '');
       return origSend(url, data);
     };
   }
