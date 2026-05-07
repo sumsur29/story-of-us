@@ -40,6 +40,102 @@
   .help-content.show { display: block; }
   .help-content ol { padding-left: 18px; }
 
+  .privacy-note { display: none; }
+
+  .net-monitor {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 20px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    font-variant-numeric: tabular-nums;
+  }
+  .net-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #4ade80;
+    box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.7);
+    animation: netPulse 2s infinite;
+    flex-shrink: 0;
+  }
+  @keyframes netPulse {
+    0% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.7); }
+    70% { box-shadow: 0 0 0 6px rgba(74, 222, 128, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0); }
+  }
+  .net-monitor.warn .net-dot { background: var(--rose); animation: none; }
+  .net-monitor.warn strong { color: var(--rose) !important; }
+
+  .net-info {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: rgba(245, 241, 232, 0.2);
+    color: var(--bone);
+    font-size: 10px;
+    font-weight: 700;
+    margin-left: 4px;
+    cursor: pointer;
+    line-height: 1;
+  }
+  .net-info:hover { background: var(--mustard); color: var(--ink); }
+  .net-explain {
+    display: none;
+    background: rgba(245, 241, 232, 0.08);
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin: 8px auto 0;
+    font-size: 11px;
+    line-height: 1.5;
+    color: rgba(245, 241, 232, 0.85);
+    text-align: left;
+    max-width: 360px;
+  }
+  .net-explain.show { display: block; }
+  .net-explain strong { color: var(--mustard); font-weight: 600; }
+
+  /* ===== UNIFIED TRUST CARD ===== */
+  .trust-card {
+    background: var(--ink);
+    color: var(--bone);
+    border-radius: 14px;
+    padding: 18px 18px 14px;
+    margin-bottom: 14px;
+    text-align: center;
+  }
+  .trust-headline {
+    font-size: 13px;
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+  .trust-headline strong { color: var(--mustard); font-weight: 600; }
+  .trust-card .net-monitor {
+    background: rgba(245, 241, 232, 0.08);
+    margin: 0 auto 10px;
+    padding: 7px 14px 7px 11px;
+    font-size: 11px;
+  }
+  .trust-card .net-monitor strong { color: #4ade80; }
+  .trust-links {
+    padding-top: 8px;
+    border-top: 1px solid rgba(245, 241, 232, 0.12);
+    margin-top: 4px;
+  }
+  .trust-links a {
+    color: var(--bone);
+    opacity: 0.7;
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+  .trust-links a:hover { opacity: 1; color: var(--mustard); }
+
   /* ===== PARSING ===== */
   #parsing-screen { display: none; position: fixed; inset: 0; background: var(--bone); align-items: center; justify-content: center; padding: 24px; }
   .parsing-content { text-align: center; max-width: 360px; }
@@ -321,8 +417,19 @@
       <input type="file" id="file-input" accept=".txt,.zip" style="display:none" />
     </div>
 
-    <div class="privacy-note">
-      <strong>Stays on your device.</strong> Parsing is 100% local — no upload, no server. Open DevTools → Network and watch zero requests fire after page load.
+    <div class="trust-card">
+      <div class="trust-headline"><strong>Stays on your device.</strong> No server, no upload — verified live.</div>
+      <div class="net-monitor" id="net-monitor" title="Anonymous pageview to Vercel Analytics — no chat data is ever sent. Click to learn more.">
+        <span class="net-dot"></span>
+        <span><strong id="net-count">0</strong> requests sent &middot; <span id="net-time">live</span></span>
+        <span class="net-info" id="net-info">?</span>
+      </div>
+      <div class="net-explain" id="net-explain">
+        Anonymous pageview ping to Vercel Analytics so I can see if anyone uses this. <strong>Your chat data is never sent</strong> — only "someone visited the page." Verify in your browser's DevTools → Network tab.
+      </div>
+      <div class="trust-links">
+        <a href="https://github.com/sumsur29/story-of-us" target="_blank" rel="noopener" id="src-link">View source on GitHub →</a>
+      </div>
     </div>
 
     <div class="help-link" id="help-toggle">How do I export my chat?</div>
@@ -384,6 +491,8 @@
   </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
 const $ = (id) => document.getElementById(id);
 const fmt = (n) => n.toLocaleString('en-US');
@@ -393,6 +502,79 @@ let RAW = null, MSGS = [], NAME_A = '', NAME_B = '', STATS = {}, MONOGRAM = '';
 let SLIDE_IDX = 0, AUTOPLAY = true, PAUSED = false, SLIDE_TIMER = null, SLIDE_DURATION = 6500;
 
 $('help-toggle').onclick = () => $('help-content').classList.toggle('show');
+
+setTimeout(() => {
+  const info = document.getElementById('net-info');
+  const explain = document.getElementById('net-explain');
+  if (info && explain) {
+    info.onclick = (e) => { e.stopPropagation(); explain.classList.toggle('show'); };
+  }
+}, 100);
+
+(function setupNetMonitor() {
+  let count = 0;
+  let lastRequestTime = null;
+  const startTime = Date.now();
+
+  const monitor = $('net-monitor');
+  const countEl = $('net-count');
+  const timeEl = $('net-time');
+
+  function update() {
+    if (!countEl) return;
+    countEl.textContent = count;
+    if (count === 0) {
+      timeEl.textContent = formatElapsed(Date.now() - startTime) + ' watching';
+    } else if (count <= 2) {
+      timeEl.textContent = 'analytics ping';
+    } else {
+      timeEl.textContent = 'last: ' + formatElapsed(Date.now() - lastRequestTime) + ' ago';
+      monitor.classList.add('warn');
+    }
+  }
+
+  function formatElapsed(ms) {
+    const s = Math.floor(ms / 1000);
+    if (s < 60) return s + 's';
+    const m = Math.floor(s / 60);
+    if (m < 60) return m + 'm';
+    return Math.floor(m / 60) + 'h';
+  }
+
+  const origFetch = window.fetch;
+  window.fetch = function(...args) {
+    const url = (args[0] && args[0].url) || args[0] || '';
+    if (typeof url === 'string' && !url.startsWith('blob:') && !url.startsWith('data:')) {
+      count++;
+      lastRequestTime = Date.now();
+      update();
+    }
+    return origFetch.apply(this, args);
+  };
+
+  const origOpen = XMLHttpRequest.prototype.open;
+  XMLHttpRequest.prototype.open = function(method, url, ...rest) {
+    if (typeof url === 'string' && !url.startsWith('blob:') && !url.startsWith('data:')) {
+      count++;
+      lastRequestTime = Date.now();
+      update();
+    }
+    return origOpen.call(this, method, url, ...rest);
+  };
+
+  const origSend = navigator.sendBeacon ? navigator.sendBeacon.bind(navigator) : null;
+  if (origSend) {
+    navigator.sendBeacon = function(url, data) {
+      count++;
+      lastRequestTime = Date.now();
+      update();
+      return origSend(url, data);
+    };
+  }
+
+  setInterval(update, 1000);
+  update();
+})();
 
 const dz = $('dropzone');
 const fi = $('file-input');
@@ -471,7 +653,7 @@ function setStatus(msg, pct) { $('parsing-status').textContent = msg; $('parsing
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
 async function unzipChat(file) {
-  if (!window.JSZip) await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js');
+  if (!window.JSZip) throw new Error('Could not load zip reader');
   const zip = await window.JSZip.loadAsync(file);
   for (const name of Object.keys(zip.files)) {
     if (name.toLowerCase().endsWith('.txt')) return await zip.files[name].async('string');
@@ -1570,8 +1752,7 @@ async function saveCurrentSlide(btn) {
   const orig = btn.textContent;
   btn.textContent = 'Saving…';
   if (!window.html2canvas) {
-    try { await loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'); }
-    catch (e) { btn.textContent = 'No internet'; setTimeout(() => btn.textContent = orig, 1500); return; }
+    btn.textContent = 'Library missing'; setTimeout(() => btn.textContent = orig, 1500); return;
   }
   const slide = document.querySelector('.slide.active');
   const frame = $('story-frame');
@@ -2070,5 +2251,6 @@ window.addEventListener('resize', () => {
   }
 });
 </script>
+<script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>
