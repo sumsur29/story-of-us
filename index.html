@@ -445,7 +445,7 @@
         <span class="net-info" id="net-info">?</span>
       </div>
       <div class="net-explain" id="net-explain">
-        Anonymous pageview ping to Vercel Analytics so I can see if anyone uses this. <strong>Your chat data is never sent</strong> — only "someone visited the page." Verify in your browser's DevTools → Network tab.
+        Vercel Analytics + Speed Insights fire a few requests for anonymous pageviews and page-load timing. <strong>Your chat data is never sent</strong> — the badge would turn red if anything went anywhere besides Vercel's analytics endpoints. Verify in your browser's DevTools → Network tab.
       </div>
       <div class="trust-links">
         <a href="https://github.com/sumsur29/story-of-us" target="_blank" rel="noopener" id="src-link">View source on GitHub →</a>
@@ -546,25 +546,45 @@ setTimeout(() => {
 }, 100);
 
 (function setupNetMonitor() {
-  let count = 0;
-  let lastRequestTime = null;
+  let okCount = 0;
+  let badCount = 0;
+  let lastBadTime = null;
   const startTime = Date.now();
+
+  const ALLOWED_PATTERNS = [
+    /vercel-insights\.com/i,
+    /vercel-scripts\.com/i,
+    /vercel-analytics\.com/i,
+    /\/_vercel\//i,
+    /vitals\.vercel-insights/i,
+    /va\.vercel-scripts/i,
+  ];
+
+  function isAllowed(url) {
+    if (!url || typeof url !== 'string') return true;
+    if (url.startsWith('blob:') || url.startsWith('data:')) return true;
+    return ALLOWED_PATTERNS.some(p => p.test(url));
+  }
 
   function update() {
     const allMonitors = document.querySelectorAll('[id^="net-monitor"]');
     const allCounts = document.querySelectorAll('[id^="net-count"]');
     const allTimes = document.querySelectorAll('[id^="net-time"]');
     if (!allCounts.length) return;
-    allCounts.forEach(el => el.textContent = count);
+
+    const total = okCount + badCount;
+    allCounts.forEach(el => el.textContent = total);
 
     let timeText;
-    if (count === 0) {
-      timeText = formatElapsed(Date.now() - startTime) + ' watching';
-    } else if (count <= 2) {
-      timeText = 'analytics ping';
-    } else {
-      timeText = 'last: ' + formatElapsed(Date.now() - lastRequestTime) + ' ago';
+    if (badCount > 0) {
+      timeText = '⚠ ' + badCount + ' unexpected · last ' + formatElapsed(Date.now() - lastBadTime) + ' ago';
       allMonitors.forEach(el => el.classList.add('warn'));
+    } else if (okCount > 0) {
+      timeText = 'platform telemetry only';
+      allMonitors.forEach(el => el.classList.remove('warn'));
+    } else {
+      timeText = formatElapsed(Date.now() - startTime) + ' watching';
+      allMonitors.forEach(el => el.classList.remove('warn'));
     }
     allTimes.forEach(el => el.textContent = timeText);
   }
@@ -580,9 +600,9 @@ setTimeout(() => {
   const origFetch = window.fetch;
   window.fetch = function(...args) {
     const url = (args[0] && args[0].url) || args[0] || '';
-    if (typeof url === 'string' && !url.startsWith('blob:') && !url.startsWith('data:')) {
-      count++;
-      lastRequestTime = Date.now();
+    if (typeof url === 'string') {
+      if (isAllowed(url)) okCount++;
+      else { badCount++; lastBadTime = Date.now(); }
       update();
     }
     return origFetch.apply(this, args);
@@ -590,9 +610,9 @@ setTimeout(() => {
 
   const origOpen = XMLHttpRequest.prototype.open;
   XMLHttpRequest.prototype.open = function(method, url, ...rest) {
-    if (typeof url === 'string' && !url.startsWith('blob:') && !url.startsWith('data:')) {
-      count++;
-      lastRequestTime = Date.now();
+    if (typeof url === 'string') {
+      if (isAllowed(url)) okCount++;
+      else { badCount++; lastBadTime = Date.now(); }
       update();
     }
     return origOpen.call(this, method, url, ...rest);
@@ -601,8 +621,8 @@ setTimeout(() => {
   const origSend = navigator.sendBeacon ? navigator.sendBeacon.bind(navigator) : null;
   if (origSend) {
     navigator.sendBeacon = function(url, data) {
-      count++;
-      lastRequestTime = Date.now();
+      if (isAllowed(url)) okCount++;
+      else { badCount++; lastBadTime = Date.now(); }
       update();
       return origSend(url, data);
     };
