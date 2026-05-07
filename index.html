@@ -206,6 +206,22 @@
   .save-btn { background: var(--ink); color: var(--bone); border: none; padding: 8px 14px; border-radius: 18px; font-size: 11px; font-weight: 600; cursor: pointer; letter-spacing: 0.05em; }
   .save-btn:hover { background: var(--pink); }
 
+  .share-link {
+    background: transparent;
+    color: var(--ink-soft);
+    border: none;
+    padding: 8px 4px;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    border-bottom: 1px dotted var(--ink-soft);
+    margin-left: 12px;
+  }
+  .share-link:hover { color: var(--pink); border-color: var(--pink); }
+  .share-link.busy { opacity: 0.6; pointer-events: none; }
+
   /* ===== SLIDE: COVER ===== */
   .cover-bg { position: absolute; inset: 0; overflow: hidden; }
   .cover-blob { position: absolute; border-radius: 50%; opacity: 0.12; }
@@ -584,6 +600,70 @@
   .verdict-label { position: relative; z-index: 2; font-size: 10px; letter-spacing: 0.25em; color: var(--mustard); text-transform: uppercase; font-weight: 700; margin-bottom: 18px; }
   .verdict-text { position: relative; z-index: 2; font-family: 'Fraunces', serif; font-style: italic; font-size: 32px; color: var(--bone); line-height: 1.15; font-weight: 500; letter-spacing: -0.01em; }
   .verdict-mono { position: relative; z-index: 2; font-family: 'Fraunces', serif; font-style: italic; font-size: 14px; color: var(--mustard); margin-top: 22px; opacity: 0.85; }
+
+  .share-ctrl {
+    background: var(--pink) !important;
+    color: white !important;
+    transition: transform 0.15s, background 0.15s;
+  }
+  .share-ctrl:hover { transform: scale(1.08); background: var(--mustard) !important; color: var(--ink) !important; }
+  .share-ctrl.busy { background: var(--ink) !important; color: var(--mustard) !important; pointer-events: none; }
+  .share-ctrl.done { background: #4ade80 !important; color: var(--ink) !important; }
+  .share-ctrl svg { display: block; }
+
+  .share-toast {
+    position: absolute;
+    top: 60px;
+    right: 14px;
+    background: var(--ink);
+    color: var(--bone);
+    padding: 6px 12px;
+    border-radius: 14px;
+    font-size: 11px;
+    font-weight: 500;
+    z-index: 23;
+    opacity: 0;
+    transition: opacity 0.2s;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+  .share-toast.show { opacity: 1; }
+
+  .btn-primary.loading {
+    background: var(--ink-soft);
+    pointer-events: none;
+    position: relative;
+  }
+  .btn-primary.loading::after {
+    content: '';
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border: 2px solid rgba(245, 241, 232, 0.3);
+    border-top-color: var(--mustard);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    margin-left: 10px;
+    vertical-align: -2px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .building-overlay {
+    position: fixed;
+    inset: 0;
+    background: var(--bone);
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .building-overlay.show { display: flex; }
+  .building-content { text-align: center; max-width: 320px; }
+  .building-title { font-family: 'Fraunces', serif; font-style: italic; font-size: 36px; color: var(--ink); margin-bottom: 8px; font-weight: 500; line-height: 1.05; }
+  .building-status { font-size: 13px; color: var(--ink-soft); margin-bottom: 18px; min-height: 18px; transition: opacity 0.2s; }
+  .building-bar { width: 100%; height: 4px; background: var(--bone-d); border-radius: 2px; overflow: hidden; }
+  .building-fill { height: 100%; background: var(--pink); width: 0%; transition: width 0.4s ease; border-radius: 2px; }
 </style>
 </head>
 <body>
@@ -665,13 +745,29 @@
   </div>
 </div>
 
+<div class="building-overlay" id="building-overlay">
+  <div class="building-content">
+    <div class="building-title" id="building-title">Building your story...</div>
+    <div class="building-status" id="building-status">Setting things up</div>
+    <div class="building-bar"><div class="building-fill" id="building-fill"></div></div>
+  </div>
+</div>
+
 <div id="stories">
   <div class="story-frame" id="story-frame">
     <div class="progress-bars" id="progress-bars"></div>
     <div class="story-controls">
+      <button class="ctrl-btn share-ctrl" id="share-icon" title="Share this card" aria-label="Share">
+        <svg width="14" height="16" viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M7 1 L7 10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          <path d="M3.5 4.5 L7 1 L10.5 4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M2 7 L2 14 L12 14 L12 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </svg>
+      </button>
       <button class="ctrl-btn" id="play-pause" title="Pause/Play">||</button>
       <button class="ctrl-btn" id="exit-btn" title="Close">×</button>
     </div>
+    <div class="share-toast" id="share-toast">Saved · post it!</div>
     <div class="nav-zone nav-prev" id="nav-prev"></div>
     <div class="nav-zone nav-next" id="nav-next"></div>
     <div id="slides-container"></div>
@@ -919,17 +1015,63 @@ async function handleFile(file) {
   }
 }
 
-$('names-go').onclick = () => {
+$('names-go').onclick = async () => {
   const a = $('name-a-input').value.trim();
   const b = $('name-b-input').value.trim();
   if (!a || !b) { alert('Names please.'); return; }
   MONOGRAM = $('monogram-input').value.trim() || `${a[0]} & ${b[0]}`;
+
+  const btn = $('names-go');
+  btn.classList.add('loading');
+  btn.textContent = 'Opening';
+
+  const overlay = $('building-overlay');
+  const status = $('building-status');
+  const fill = $('building-fill');
+  const title = $('building-title');
+
+  const setBuild = (msg, pct, t) => {
+    status.style.opacity = '0';
+    setTimeout(() => {
+      status.textContent = msg;
+      status.style.opacity = '1';
+      if (t) title.textContent = t;
+    }, 150);
+    fill.style.width = pct + '%';
+  };
+
+  $('names-screen').style.display = 'none';
+  overlay.classList.add('show');
+  setBuild('Renaming voices', 8, 'Building your story...');
+  await sleep(50);
+
   MSGS = MSGS.map(m => ({ ...m, sender: m.sender === NAME_A ? a : (m.sender === NAME_B ? b : m.sender) }));
   NAME_A = a; NAME_B = b;
+
+  setBuild('Counting receipts and silences', 22);
+  await sleep(40);
+
+  setBuild('Detecting your eras', 38, 'Finding the patterns...');
+  await sleep(40);
+
   STATS = computeStats(MSGS, NAME_A, NAME_B);
-  $('names-screen').style.display = 'none';
+
+  setBuild('Picking signature phrases', 60, 'Reading between the lines...');
+  await sleep(60);
+
+  setBuild('Pulling the loudest hour', 75);
+  await sleep(40);
+
+  setBuild('Calculating the verdict', 88, 'Almost there...');
+  await sleep(60);
+
   $('stories').style.display = 'flex';
+  setBuild('Opening the book', 100);
+  await sleep(200);
+
   initStories();
+  await sleep(150);
+  overlay.classList.remove('show');
 };
 
 function setStatus(msg, pct) { $('parsing-status').textContent = msg; $('parsing-fill').style.width = pct + '%'; }
@@ -1926,7 +2068,13 @@ function buildSlides() {
           <div class="verdict-text">${esc(STATS.verdict.verdict)}</div>
           <div class="verdict-mono">${esc(MONOGRAM)} · ${fmt(STATS.total)} messages</div>
         </div>
-        <div class="s-footer"><span class="s-monogram">${esc(MONOGRAM)}</span><button class="save-btn" data-save="verdict">Save</button></div>
+        <div class="s-footer">
+          <span class="s-monogram">${esc(MONOGRAM)}</span>
+          <span style="display:flex; align-items:center;">
+            <button class="save-btn" data-save="verdict">Save</button>
+            <button class="share-link" data-share="verdict">Share verdict →</button>
+          </span>
+        </div>
       `
     },
     {
@@ -1989,6 +2137,9 @@ function showSlide(idx) {
     if (slideId === 'topics') drawTopics();
     if (slideId === 'supercut') playSupercut();
     if (slideId === 'quotegame') initQuoteGame();
+
+    const shareBtn = $('share-icon');
+    if (shareBtn) shareBtn.style.display = (slideId === 'cover' || slideId === 'fin') ? 'none' : 'flex';
   }
 
   clearTimeout(SLIDE_TIMER);
@@ -2010,6 +2161,11 @@ function setupNav() {
     else showSlide(SLIDE_IDX);
   };
 
+  $('share-icon').onclick = async (e) => {
+    e.stopPropagation();
+    await shareCurrentSlide();
+  };
+
   document.addEventListener('keydown', e => {
     if (e.key === 'ArrowLeft') showSlide(SLIDE_IDX - 1);
     if (e.key === 'ArrowRight') showSlide(SLIDE_IDX + 1);
@@ -2028,6 +2184,10 @@ function setupNav() {
     if (e.target.classList.contains('save-btn')) {
       e.stopPropagation();
       await saveCurrentSlide(e.target);
+    }
+    if (e.target.classList.contains('share-link')) {
+      e.stopPropagation();
+      await shareVerdict(e.target);
     }
     if (e.target.id === 'tip-open' || e.target.closest('#tip-open')) {
       e.stopPropagation();
@@ -2082,7 +2242,6 @@ async function saveCurrentSlide(btn) {
   if (!window.html2canvas) {
     btn.textContent = 'Library missing'; setTimeout(() => btn.textContent = orig, 1500); return;
   }
-  const slide = document.querySelector('.slide.active');
   const frame = $('story-frame');
   try {
     const canvas = await window.html2canvas(frame, { scale: 2, backgroundColor: '#F5F1E8', logging: false, useCORS: true });
@@ -2093,6 +2252,140 @@ async function saveCurrentSlide(btn) {
     btn.textContent = '✓ Saved';
   } catch (e) { console.error(e); btn.textContent = 'Failed'; }
   setTimeout(() => btn.textContent = orig, 1500);
+}
+
+async function shareCurrentSlide() {
+  const btn = $('share-icon');
+  if (!window.html2canvas) return;
+
+  const origHTML = btn.innerHTML;
+  btn.classList.add('busy');
+  btn.innerHTML = '<span style="font-size:14px; font-weight:700;">…</span>';
+  PAUSED = true;
+  clearTimeout(SLIDE_TIMER);
+
+  const frame = $('story-frame');
+  const slide = document.querySelector('.slide.active');
+  const slideId = slide ? slide.dataset.idx : '';
+
+  let watermark = null;
+  try {
+    watermark = document.createElement('div');
+    watermark.style.cssText = 'position:absolute; bottom:8px; left:0; right:0; text-align:center; font-family:Inter,sans-serif; font-size:9px; color:#1B4332; opacity:0.6; letter-spacing:0.1em; z-index:99; pointer-events:none;';
+    watermark.textContent = 'story-of-us-gilt.vercel.app';
+    frame.appendChild(watermark);
+
+    const canvas = await window.html2canvas(frame, { scale: 2, backgroundColor: '#F5F1E8', logging: false, useCORS: true });
+    if (watermark && watermark.parentNode) watermark.parentNode.removeChild(watermark);
+
+    const blob = await new Promise(r => canvas.toBlob(r, 'image/png'));
+    if (!blob) throw new Error('blob fail');
+    const file = new File([blob], `stories-of-us-${slideId || 'card'}.png`, { type: 'image/png' });
+
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try {
+        await navigator.share({
+          files: [file],
+          title: 'The Stories of Us',
+          text: 'Made my chat into a story 👀 try yours: story-of-us-gilt.vercel.app'
+        });
+        showToast('Shared!');
+      } catch (err) {
+        if (err.name !== 'AbortError') downloadCanvas(canvas, slideId);
+      }
+    } else {
+      downloadCanvas(canvas, slideId);
+      showToast('Saved · post it!');
+    }
+
+    btn.classList.remove('busy');
+    btn.classList.add('done');
+    btn.innerHTML = '<span style="font-size:16px; font-weight:700;">✓</span>';
+    setTimeout(() => { btn.classList.remove('done'); btn.innerHTML = origHTML; }, 2000);
+  } catch (e) {
+    console.error(e);
+    if (watermark && watermark.parentNode) watermark.parentNode.removeChild(watermark);
+    btn.classList.remove('busy');
+    btn.innerHTML = origHTML;
+    showToast('Failed');
+  }
+}
+
+function downloadCanvas(canvas, slideId) {
+  const link = document.createElement('a');
+  link.download = `stories-of-us-${slideId || 'card'}.png`;
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+}
+
+function showToast(msg) {
+  const t = $('share-toast');
+  if (!t) return;
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+const SHARE_URL = 'story-of-us-gilt.vercel.app';
+
+async function shareVerdict(btn) {
+  const orig = btn.textContent;
+  btn.classList.add('busy');
+  btn.textContent = 'Preparing…';
+  if (!window.html2canvas) { btn.textContent = 'Library missing'; setTimeout(() => { btn.textContent = orig; btn.classList.remove('busy'); }, 1500); return; }
+
+  const frame = $('story-frame');
+  const verdictCard = frame.querySelector('.verdict-card');
+  if (!verdictCard) { btn.textContent = 'No card'; setTimeout(() => { btn.textContent = orig; btn.classList.remove('busy'); }, 1500); return; }
+
+  const ctaBanner = document.createElement('div');
+  ctaBanner.style.cssText = 'position:absolute; bottom:0; left:0; right:0; padding:14px 20px; background:#1B4332; color:#F5B700; text-align:center; font-family:Inter,sans-serif; font-size:13px; font-weight:600; letter-spacing:0.06em; z-index:5;';
+  ctaBanner.innerHTML = `Get your verdict at <span style="color:#F5F1E8">${SHARE_URL}</span>`;
+
+  const origPosition = frame.style.position;
+  if (!frame.style.position) frame.style.position = 'relative';
+  frame.appendChild(ctaBanner);
+
+  try {
+    const canvas = await window.html2canvas(frame, { scale: 2, backgroundColor: '#F5F1E8', logging: false, useCORS: true });
+    frame.removeChild(ctaBanner);
+    if (origPosition !== undefined) frame.style.position = origPosition;
+
+    const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
+    if (!blob) { btn.textContent = 'Failed'; setTimeout(() => { btn.textContent = orig; btn.classList.remove('busy'); }, 1500); return; }
+
+    const file = new File([blob], 'my-verdict.png', { type: 'image/png' });
+    const shareText = `My verdict: ${STATS.verdict ? STATS.verdict.verdict : 'see for yourself'} — get yours at https://${SHARE_URL}`;
+
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try {
+        await navigator.share({ files: [file], title: 'The Stories of Us', text: shareText });
+        btn.textContent = '✓ Shared';
+      } catch (err) {
+        if (err.name !== 'AbortError') {
+          downloadCanvas(canvas, 'my-verdict.png');
+          btn.textContent = '✓ Downloaded';
+        } else {
+          btn.textContent = orig;
+        }
+      }
+    } else {
+      downloadCanvas(canvas, 'my-verdict.png');
+      btn.textContent = '✓ Downloaded';
+    }
+  } catch (e) {
+    console.error(e);
+    if (frame.contains(ctaBanner)) frame.removeChild(ctaBanner);
+    btn.textContent = 'Failed';
+  }
+  setTimeout(() => { btn.textContent = orig; btn.classList.remove('busy'); }, 1800);
+}
+
+function downloadCanvas(canvas, filename) {
+  const link = document.createElement('a');
+  link.download = filename;
+  link.href = canvas.toDataURL('image/png');
+  link.click();
 }
 
 function drawPulse() {
