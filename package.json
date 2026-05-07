@@ -1,0 +1,16 @@
+{
+  "name": "story-of-us",
+  "version": "1.0.0",
+  "description": "Turn your WhatsApp chat into a story",
+  "scripts": {
+    "dev": "npx serve .",
+    "start": "npx serve ."
+  },
+  "keywords": [
+    "whatsapp",
+    "chat",
+    "story"
+  ],
+  "author": "",
+  "license": "ISC"
+}
