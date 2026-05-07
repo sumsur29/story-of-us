@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<title>The Stories of Us</title>
+<title>The Stories of Us — Turn your WhatsApp chat into a story</title>
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -235,9 +235,9 @@
 
 <div id="upload-screen">
   <div class="upload-card">
-    <div class="badge">A WhatsApp Story</div>
+    <div class="badge">Your chat, told as a story</div>
     <h1>The stories<br/>of us.</h1>
-    <p class="lede">Twelve years of texts, twelve cards. Tap through like a story you'd actually post.</p>
+    <p class="lede">Upload any WhatsApp export and we'll turn it into a tappable, shareable story — the receipts, the rhythm, the words that are uniquely yours.<br/><br/><span style="color:var(--ink); font-weight:500;">Works for couples, best friends, family group chats, your mom.</span></p>
 
     <div class="dropzone" id="dropzone">
       <div class="icon">↑</div>
@@ -758,9 +758,9 @@ function buildSlides() {
         </div>
         <div class="cover-content">
           <div class="cover-monogram">${esc(MONOGRAM)}</div>
-          <div class="cover-title">The stories<br/>of us.</div>
+          <div class="cover-title">${esc(NAME_A)}<br/>&amp; ${esc(NAME_B)}.</div>
           <div class="cover-sub">${formatRange(STATS.firstDate, STATS.lastDate)}</div>
-          <div class="cover-pill">${fmt(STATS.total)} messages · 11 chapters</div>
+          <div class="cover-pill">${fmt(STATS.total)} messages · 13 chapters</div>
         </div>
         <div class="s-footer"><span class="s-monogram">${esc(MONOGRAM)}</span><span>tap →</span></div>
       `
