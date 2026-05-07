@@ -2268,6 +2268,9 @@ async function shareCurrentSlide() {
   const slide = document.querySelector('.slide.active');
   const slideId = slide ? slide.dataset.idx : '';
 
+  const SHARE_URL = 'https://story-of-us-gilt.vercel.app';
+  const SHARE_TEXT = 'made my chat into a story 👀 try yours:';
+
   let watermark = null;
   try {
     watermark = document.createElement('div');
@@ -2275,27 +2278,61 @@ async function shareCurrentSlide() {
     watermark.textContent = 'story-of-us-gilt.vercel.app';
     frame.appendChild(watermark);
 
-    const canvas = await window.html2canvas(frame, { scale: 2, backgroundColor: '#F5F1E8', logging: false, useCORS: true });
+    const canvas = await window.html2canvas(frame, {
+      scale: /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) ? 1.5 : 2,
+      backgroundColor: '#F5F1E8',
+      logging: false,
+      useCORS: true
+    });
     if (watermark && watermark.parentNode) watermark.parentNode.removeChild(watermark);
 
-    const blob = await new Promise(r => canvas.toBlob(r, 'image/png'));
-    if (!blob) throw new Error('blob fail');
-    const file = new File([blob], `stories-of-us-${slideId || 'card'}.png`, { type: 'image/png' });
+    const blob = await new Promise(r => canvas.toBlob(r, 'image/png', 0.92));
+    if (!blob) throw new Error('Could not make image');
 
-    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    const file = new File([blob], `stories-of-us.png`, { type: 'image/png' });
+
+    let shared = false;
+
+    if (navigator.share) {
       try {
-        await navigator.share({
-          files: [file],
-          title: 'The Stories of Us',
-          text: 'Made my chat into a story 👀 try yours: story-of-us-gilt.vercel.app'
-        });
-        showToast('Shared!');
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            files: [file],
+            title: 'The Stories of Us',
+            text: SHARE_TEXT + ' ' + SHARE_URL
+          });
+          shared = true;
+          showToast('Shared!');
+        }
       } catch (err) {
-        if (err.name !== 'AbortError') downloadCanvas(canvas, slideId);
+        if (err.name === 'AbortError') { shared = true; }
       }
-    } else {
+
+      if (!shared) {
+        try {
+          await navigator.share({
+            title: 'The Stories of Us',
+            text: SHARE_TEXT,
+            url: SHARE_URL
+          });
+          shared = true;
+          downloadCanvas(canvas, slideId);
+          showToast('Image saved + link shared');
+        } catch (err) {
+          if (err.name === 'AbortError') {
+            shared = true;
+            downloadCanvas(canvas, slideId);
+            showToast('Image saved');
+          }
+        }
+      }
+    }
+
+    if (!shared) {
       downloadCanvas(canvas, slideId);
-      showToast('Saved · post it!');
+      try { await navigator.clipboard.writeText(SHARE_TEXT + ' ' + SHARE_URL); showToast('Image saved · link copied'); }
+      catch(e) { showToast('Saved · post it!'); }
     }
 
     btn.classList.remove('busy');
@@ -2307,7 +2344,7 @@ async function shareCurrentSlide() {
     if (watermark && watermark.parentNode) watermark.parentNode.removeChild(watermark);
     btn.classList.remove('busy');
     btn.innerHTML = origHTML;
-    showToast('Failed');
+    showToast('Failed: ' + (e.message || 'unknown'));
   }
 }
 
